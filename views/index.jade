@@ -21,19 +21,20 @@ block content
       imageContainer.appendChild(a);
 
       var actualImage = new Image();
-      actualImage.src="images/medium/"+imgNo+".jpg";
+      actualImage.src="images/uncompressed/"+imgNo+".jpg";
       actualImage.className+="imageContainer"
       actualImage.style.padding = "8px"
       actualImage.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
       actualImage.style.borderRadius = "8px";
       actualImage.style.height = "auto";
       actualImage.style.width = "auto";
-      actualImage.srcset="images/uncompressed/"+imgNo+".jpg 4096w, images/large/"+imgNo+".jpg 1536w, images/medium/"+imgNo+".jpg 640w, images/small/"+imgNo+".jpg 320w";
+      actualImage.srcset="images/small/"+imgNo+".jpg 360w, images/medium/"+imgNo+".jpg 640w, images/large/"+imgNo+".jpg 1536w, images/uncompressed/"+imgNo+".jpg 4096w";
 
 
       a.appendChild(actualImage);
       document.body.appendChild(imageContainer);
       isDrawed=true;
+      alert("screen size: " + screen.width + " window.innerWidth: " +window.innerWidth+" $(window).width() " + $(window).width());
     }
     
   div(id="picture-container")
