@@ -1,25 +1,26 @@
 extend layout
 block content
   script(type='text/javascript').
-    var isDrawed = false;
     var quality;
+    $isDrawed=false;
+    $('html').click(function() {
+      $isDrawed=false;
+      $(".imageContainer").remove();
+    });
+
 
     function drawpicture(imgNo) {
-      if(isDrawed){
+      if($isDrawed){
         return
       }
-      var imageContainer = document.createElement("div");
+      imageContainer = document.createElement("div");
       imageContainer.style.position = "absolute";
       imageContainer.style.textAlign = "center";
       imageContainer.style.width = "100%";
       imageContainer.style.height = "auto";
-      //imageContainer.style.top = 10 + "px";      
+      imageContainer.className += " imageContainer";     
 
       var a = document.createElement('a');
-      a.onclick=function() {
-        imageContainer.parentNode.removeChild(imageContainer);
-        isDrawed=false;
-      }
       imageContainer.appendChild(a);
       setQuality();
 
@@ -36,7 +37,7 @@ block content
 
       a.appendChild(actualImage);
       document.body.appendChild(imageContainer);
-      isDrawed=true;
+      $isDrawed=true;
     }
 
     function setQuality() {
@@ -62,6 +63,7 @@ block content
 
           var a =document.createElement('a');
           a.data=i;
+          a.className='imageCreator';
           a.onclick= function() {
             drawpicture(this.data);
           }
@@ -69,6 +71,10 @@ block content
           pictureContainer.appendChild(a);
           a.appendChild(thumbnail);
         }
+        $('.imageCreator').click(function(event){
+           console.log("Clicked on a, stopped propagation");
+           event.stopPropagation();
+        });
       }  
       drawthumbs();
 block sidebar
