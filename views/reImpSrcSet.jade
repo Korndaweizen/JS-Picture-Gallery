@@ -1,8 +1,10 @@
 extend layout
 block content
   script(type='text/javascript').
-    var quality;
+    $quality="";
+    $server="";
     $isDrawed=false;
+    
     $('html').click(function() {
       $isDrawed=false;
       $(".imageContainer").remove();
@@ -23,9 +25,10 @@ block content
       var a = document.createElement('a');
       imageContainer.appendChild(a);
       setQuality();
+      setServer();
 
       var actualImage = new Image();
-      actualImage.src="images/"+quality+"/"+imgNo+".jpg";
+      actualImage.src=""+$server+"images/"+$quality+"/"+imgNo+".jpg";
       actualImage.className+="imageContainer"
       actualImage.style.padding = "8px"
       actualImage.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
@@ -41,14 +44,21 @@ block content
     }
 
     function setQuality() {
+      if (true)
+        setQualityByScreenSize();
+    }
+    function setQualityByScreenSize() {
         console.log("screen.Width: "+screen.width);
-        quality="uncompressed";
+        $quality="uncompressed";
         if (viewportWidth< 1536)
-          quality="large";
+          $quality="large";
         if (viewportWidth< 640)
-          quality="medium";
+          $quality="medium";
         if (viewportWidth< 320)
-          quality="small";
+          $quality="small";
+    }
+    function setServer() {
+        $server="http://78.46.49.57:21210/";
     }
     
   div(id="picture-container")
