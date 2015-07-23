@@ -40,7 +40,7 @@ if (app.get('env') === 'development') {
     app.locals.pretty = true; //Format html code when in dev
 }
 
-app.set('port', (process.env.PORT || 3000));
+app.set('port', (process.env.PORT || 21210));
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
