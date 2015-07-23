@@ -61,6 +61,18 @@ app.listen(app.get('port'), function() {
 	        user: req.user
 	    })
 	})
+	app.get('/srcSet', function(req, res) {
+	    res.render('srcSet', {
+	        title: 'Original Source Set Algo',
+	        user: req.user
+	    })
+	})
+	app.get('/reImpSrcSet', function(req, res) {
+	    res.render('reImpSrcSet', {
+	        title: 'Self Implemented Source Set Algo',
+	        user: req.user
+	    })
+	})
 	app.get('/about', function(req, res) {
 	    res.render('about', {
 	        title: 'About',

@@ -7,6 +7,20 @@ html
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
     link(rel='stylesheet', href='/stylesheets/style.css')
     meta(name='viewport', content='width=device-width, initial-scale=1')
+    script.
+      var viewportWidth;
+      var viewportHeight;
+      $( document ).ready(function() {
+        viewportWidth = $(window).width();
+        viewportHeight = $(window).height();
+        console.log( "Width: "+ viewportWidth + ", Height: " + viewportHeight );
+      });
+      $(window).on('resize orientationChange', function(event) {
+        viewportWidth = $(window).width();
+        viewportHeight = $(window).height();
+        console.log( "Width: "+ viewportWidth + ", Height: " + viewportHeight );
+      });
+
   body
     header
         .nav.navbar.navbar-inverse.navbar-fixed-top 
@@ -21,8 +35,8 @@ html
             div.collapse.navbar-collapse.pull-right(id="navbar")
               ul.nav.navbar-nav
                 li: a( href="/") Home
-                li: a( href="/about" ) About
-                li: a( href="/contact" ) Contact
+                li: a( href="/srcSet" ) SrcSet
+                li: a( href="/reImpSrcSet" ) ReImpSrcSet
 
     .container
         .row
