@@ -63,13 +63,13 @@ app.listen(app.get('port'), function() {
 	})
 	app.get('/srcSet', function(req, res) {
 	    res.render('srcSet', {
-	        title: 'Original Source Set Algo',
+	        title: 'Source Set Algo',
 	        user: req.user
 	    })
 	})
-	app.get('/reImpSrcSet', function(req, res) {
-	    res.render('reImpSrcSet', {
-	        title: 'Self Implemented Source Set Algo',
+	app.get('/srcSet2', function(req, res) {
+	    res.render('srcSet2', {
+	        title: 'Original SRCSET',
 	        user: req.user
 	    })
 	})

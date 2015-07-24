@@ -1,41 +1,74 @@
 extend layout
 block content
   script(type='text/javascript').
-    var isDrawed = false;
+    $quality="";
+    $server="";
+    $isDrawed=false;
+
+    $('html').click(function() {
+      $isDrawed=false;
+      $(".imageContainer").remove();
+    });
+
+
     function drawpicture(imgNo) {
-      if(isDrawed){
+      if($isDrawed){
         return
       }
-      var imageContainer = document.createElement("div");
+      imageContainer = document.createElement("div");
       imageContainer.style.position = "absolute";
       imageContainer.style.textAlign = "center";
       imageContainer.style.width = "100%";
       imageContainer.style.height = "auto";
-      //imageContainer.style.top = 10 + "px";      
+      imageContainer.className += " imageContainer";     
 
       var a = document.createElement('a');
-      a.onclick=function() {
-        imageContainer.parentNode.removeChild(imageContainer);
-        isDrawed=false;
-      }
       imageContainer.appendChild(a);
+      setQuality();
+      setServer();
 
       var actualImage = new Image();
-
-      actualImage.src="images/uncompressed/"+imgNo+".jpg";
+      actualImage.src=""+$server+"images/"+$quality+"/"+imgNo+".jpg";
       actualImage.className+="imageContainer"
       actualImage.style.padding = "8px"
       actualImage.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
       actualImage.style.borderRadius = "8px";
       actualImage.style.height = "auto";
       actualImage.style.width = "auto";
-      actualImage.srcset="images/small/"+imgNo+".jpg 360w, images/medium/"+imgNo+".jpg 640w, images/large/"+imgNo+".jpg 1536w, images/uncompressed/"+imgNo+".jpg 4096w";
+      
 
 
       a.appendChild(actualImage);
       document.body.appendChild(imageContainer);
-      isDrawed=true;
-      alert("screen size: " + screen.width + " window.innerWidth: " +window.innerWidth+" $(window).width() " + $(window).width());
+      $isDrawed=true;
+    }
+
+    function setQuality() {
+        if($("#radio_ownsrcset").is(":checked"))
+          setQualityByScreenSize();
+        if($("#radio_uncompressed").is(":checked"))
+          $quality="uncompressed";
+        if($("#radio_large").is(":checked"))
+          $quality="large";
+        if($("#radio_medium").is(":checked"))
+          $quality="medium";
+        if($("#radio_small").is(":checked"))
+          $quality="small";
+    }
+
+    function setQualityByScreenSize() {
+        console.log("screen.Width: "+screen.width);
+        $quality="uncompressed";
+        if (viewportWidth< 1536)
+          $quality="large";
+        if (viewportWidth< 640)
+          $quality="medium";
+        if (viewportWidth< 320)
+          $quality="small";
+    }
+    
+    function setServer() {
+        $server="http://78.46.49.57:21210/";
     }
     
   div(id="picture-container")
@@ -50,22 +83,41 @@ block content
 
           var a =document.createElement('a');
           a.data=i;
+          a.className='imageCreator';
           a.onclick= function() {
             drawpicture(this.data);
           }
 
           pictureContainer.appendChild(a);
           a.appendChild(thumbnail);
-          console.log(i);
         }
+        $('.imageCreator').click(function(event){
+           console.log("Clicked on a, stopped propagation");
+           event.stopPropagation();
+        });
       }  
       drawthumbs();
 block sidebar
   .widget
-    h1 Widget
-    p
-      | Sed auctor neque eu tellus rhoncus ut
-      | eleifend nibh porttitor. Ut in nulla enim.
-    p
-      | Vivamus hendrerit arcu sed erat molestie
-      | vehicula.
+    h1 Algorithms
+    h2 Quality
+    fieldset
+      input(type='radio', name='QualityAlgo', value='ownsrcset', id='radio_ownsrcset', checked)
+      label(for='radio_ownsrcset')  Reimplemented srcset
+      br
+      input(type='radio', name='QualityAlgo', value='Uncompressed', id='radio_uncompressed')
+      label(for='radio_uncompressed')   Uncompressed
+      br
+      input(type='radio', name='QualityAlgo', value='Large', id='radio_large')
+      label(for='radio_large')  Large
+      br
+      input(type='radio', name='QualityAlgo', value='Medium', id='radio_medium')
+      label(for='radio_medium')  Medium
+      br
+      input(type='radio', name='QualityAlgo', value='Small', id='radio_small')
+      label(for='radio_small')  Small
+    h2 Server
+    fieldset    
+      input#radio_htpt(type='radio', name='ServerAlgo', value='Highest throughput', checked)
+      label(for='radio_htpt')  Highest throughput
+      br    

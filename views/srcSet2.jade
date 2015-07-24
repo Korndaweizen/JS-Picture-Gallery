@@ -1,0 +1,71 @@
+extend layout
+block content
+  script(type='text/javascript').
+    var isDrawed = false;
+    function drawpicture(imgNo) {
+      if(isDrawed){
+        return
+      }
+      var imageContainer = document.createElement("div");
+      imageContainer.style.position = "absolute";
+      imageContainer.style.textAlign = "center";
+      imageContainer.style.width = "100%";
+      imageContainer.style.height = "auto";
+      //imageContainer.style.top = 10 + "px";      
+
+      var a = document.createElement('a');
+      a.onclick=function() {
+        imageContainer.parentNode.removeChild(imageContainer);
+        isDrawed=false;
+      }
+      imageContainer.appendChild(a);
+
+      var actualImage = new Image();
+
+      actualImage.src="images/uncompressed/"+imgNo+".jpg";
+      actualImage.className+="imageContainer"
+      actualImage.style.padding = "8px"
+      actualImage.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
+      actualImage.style.borderRadius = "8px";
+      actualImage.style.height = "auto";
+      actualImage.style.width = "auto";
+      actualImage.srcset="images/small/"+imgNo+".jpg 360w, images/medium/"+imgNo+".jpg 640w, images/large/"+imgNo+".jpg 1536w, images/uncompressed/"+imgNo+".jpg 4096w";
+
+
+      a.appendChild(actualImage);
+      document.body.appendChild(imageContainer);
+      isDrawed=true;
+      alert("screen size: " + screen.width + " window.innerWidth: " +window.innerWidth+" $(window).width() " + $(window).width());
+    }
+    
+  div(id="picture-container")
+    script(type="text/javascript").
+      function drawthumbs() {
+        var pictureContainer= document.getElementById('picture-container');
+        for(var i= 1; i<=25; i++){
+          var thumbnail= document.createElement("img")
+          thumbnail.height=100;
+          thumbnail.width=100;
+          thumbnail.src="images/thumbnails/"+i+".jpg";
+
+          var a =document.createElement('a');
+          a.data=i;
+          a.onclick= function() {
+            drawpicture(this.data);
+          }
+
+          pictureContainer.appendChild(a);
+          a.appendChild(thumbnail);
+          console.log(i);
+        }
+      }  
+      drawthumbs();
+block sidebar
+  .widget
+    h1 Widget
+    p
+      | Sed auctor neque eu tellus rhoncus ut
+      | eleifend nibh porttitor. Ut in nulla enim.
+    p
+      | Vivamus hendrerit arcu sed erat molestie
+      | vehicula.
