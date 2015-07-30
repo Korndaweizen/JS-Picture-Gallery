@@ -11,14 +11,14 @@ html
       var viewportWidth;
       var viewportHeight;
       $servers=[];
+      $.get("/serverlist", function(data, status){
+            $servers=data.availableServers;
+            console.log("Data: " + $servers + "\nStatus: " + status);
+      });
       $( document ).ready(function() {
         viewportWidth = $(window).width();
         viewportHeight = $(window).height();
         console.log( "Width: "+ viewportWidth + ", Height: " + viewportHeight );
-        $.get("/serverlist", function(data, status){
-            $servers=data.availableServers;
-            console.log("Data: " + data.availableServers + "\nStatus: " + status);
-        });
       });
       $(window).on('resize orientationChange', function(event) {
         viewportWidth = $(window).width();

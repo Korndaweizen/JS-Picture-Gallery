@@ -65,8 +65,23 @@ block content
     }
     
     function setServer() {
+        if($("#radio_htpt").is(":checked"))
+          setServerByHighestTpt();
+
+        for (val of $servers) {
+          console.log(val);
+          var replaced = val.replace(":", "_");
+          replaced = val.replace(".", "_");
+          if($("#"+replaced).is(":checked"))
+            $server="http://"+val+"/";
+        }
+        console.log('Current server: '+$server);
+    }
+
+    function setServerByHighestTpt() {
         $server="http://78.46.49.57:21210/";
     }
+
     
   div(id="picture-container")
     script(type="text/javascript").
@@ -114,7 +129,32 @@ block sidebar
       input(type='radio', name='QualityAlgo', value='Small', id='radio_small')
       label(for='radio_small')  Small
     h2 Server
-    fieldset    
+    fieldset#servers    
       input#radio_htpt(type='radio', name='ServerAlgo', value='Highest throughput', checked)
       label(for='radio_htpt')  Highest throughput
-      br    
+      br
+    script(type='text/javascript'). 
+      var count=0;   
+      for (val of $servers) {
+        var temp=count+1;
+        var radio = document.createElement("input");
+        radio.setAttribute('type', 'radio');
+        radio.setAttribute('value', 'server'+temp);
+        radio.setAttribute('name', 'ServerAlgo');
+        var replaced = val.replace(":", "_");
+        replaced = val.replace(".", "_");
+        radio.setAttribute('id', replaced);
+
+        var label = document.createElement("label");
+        label.setAttribute("for",val);
+        label.innerHTML = "&nbsp"+"Server: "+temp;
+
+        var br = document.createElement("br");
+
+        $("#servers").append(radio);
+        $("#servers").append(label);
+        $("#servers").append(br);
+
+        console.log(val);
+        count=count+1;
+      }
