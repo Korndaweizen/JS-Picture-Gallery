@@ -49,7 +49,10 @@ app.listen(app.get('port'), function() {
 
 
 
-
+//read serverlist on startup
+var fs  = require("fs");
+var path = './serverlist';
+var serverArray = fs.readFileSync(path).toString().split('\n');
 
 
 /* Redirects
@@ -61,6 +64,11 @@ app.listen(app.get('port'), function() {
 	        user: req.user
 	    })
 	})
+	app.get('/serverlist', function(req, res) {
+		res.json({
+            availableServers: ['localhost:21210', 'localhost:21211']
+        });
+	})	
 	app.get('/srcSet', function(req, res) {
 	    res.render('srcSet', {
 	        title: 'Source Set Algo',
