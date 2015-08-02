@@ -66,7 +66,7 @@ var serverArray = fs.readFileSync(path).toString().split('\n');
 	})
 	app.get('/serverlist', function(req, res) {
 		res.json({
-            availableServers: ['localhost:21210', 'localhost:21211']
+            availableServers: serverArray
         });
 	})	
 	app.get('/srcSet', function(req, res) {

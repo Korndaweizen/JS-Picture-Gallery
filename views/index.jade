@@ -1,8 +1,8 @@
 extend layout
 block content
   script(type='text/javascript').
-    $quality="";
-    $server="";
+    $quality="medium";
+    $server="http://78.46.49.57:21210/";
     $isDrawed=false;
 
     $('html').click(function() {
@@ -23,8 +23,8 @@ block content
 
       var a = document.createElement('a');
       imageContainer.appendChild(a);
-      setQuality();
-      setServer();
+      //setQuality();
+      //setServer();
 
       var actualImage = new Image();
       actualImage.src=""+$server+"images/"+$quality+"/"+imgNo+".jpg"+"?cachebreaker="+new Date().getTime();
@@ -41,6 +41,7 @@ block content
     }
 
     function setQuality() {
+        console.log("Quality Settings are being changed::")
         if($("#radio_ownsrcset").is(":checked"))
           setQualityByScreenSize();
         if($("#radio_uncompressed").is(":checked"))
@@ -51,6 +52,7 @@ block content
           $quality="medium";
         if($("#radio_small").is(":checked"))
           $quality="small";
+        console.log("New Quality: "+$quality);
     }
 
     function setQualityByScreenSize() {
@@ -65,23 +67,49 @@ block content
     }
     
     function setServer() {
+        console.log("Server Settings are being changed:")
         if($("#radio_htpt").is(":checked"))
           setServerByHighestTpt();
-
-        for (val of $servers) {
-          console.log(val);
-          var replaced = val.replace(":", "_");
-          replaced = replaced.replace(".", "_");
-          if($("#"+replaced).is(":checked"))
-            $server="http://"+val+"/";
+        if($("#radio_lpng").is(":checked"))
+          setServerByLowestPing();
+        if(!($("#radio_htpt").is(":checked")) && !($("#radio_lpng").is(":checked")))
+        {
+          console.log("Server-selection by hand:");
+          var count=1;
+          var checkup=$("input[name=serverAlgo]:checked").val().replace("server","");
+          for (val of $servers) {
+            if(count==checkup){
+              console.log("Setting server!!! Yeah i am the if")
+              $server="http://"+val+"/";
+            }
+            count=count+1;
+          }
         }
-        console.log('Current server: '+$server);
+        console.log('New Server: '+$server);
     }
 
     function setServerByHighestTpt() {
+        console.log("Server-selection by tpt:");
         $server="http://78.46.49.57:21210/";
     }
 
+    function setServerByLowestPing() {
+      console.log("Server-selection by ping:");
+      for (val of $servers) {
+        var serverurl= "http://"+val;
+        ping(serverurl).then(function(delta) {
+            console.log("Server: "+val+", Ping: "+delta);
+        }).catch(function(error) {
+            console.log(String(error));
+        });
+      }
+    }
+    $('body').on('change', 'input[name=serverAlgo]:radio', setServer);
+    //$('input[name=serverAlgo]:radio').change(setServer);
+    $('body').on('change', 'input[name=qualityAlgo]:radio', setQuality);
+
+    setQuality();
+    setServer();
     
   div(id="picture-container")
     script(type="text/javascript").
@@ -114,25 +142,27 @@ block sidebar
     h1 Algorithms
     h2 Quality
     fieldset
-      input(type='radio', name='QualityAlgo', value='ownsrcset', id='radio_ownsrcset', checked)
+      input(type='radio', name='qualityAlgo', value='ownsrcset', id='radio_ownsrcset', checked)
       label(for='radio_ownsrcset')  Reimplemented srcset
       br
-      input(type='radio', name='QualityAlgo', value='Uncompressed', id='radio_uncompressed')
+      input(type='radio', name='qualityAlgo', value='Uncompressed', id='radio_uncompressed')
       label(for='radio_uncompressed')   Uncompressed
       br
-      input(type='radio', name='QualityAlgo', value='Large', id='radio_large')
+      input(type='radio', name='qualityAlgo', value='Large', id='radio_large')
       label(for='radio_large')  Large
       br
-      input(type='radio', name='QualityAlgo', value='Medium', id='radio_medium')
+      input(type='radio', name='qualityAlgo', value='Medium', id='radio_medium')
       label(for='radio_medium')  Medium
       br
-      input(type='radio', name='QualityAlgo', value='Small', id='radio_small')
+      input(type='radio', name='qualityAlgo', value='Small', id='radio_small')
       label(for='radio_small')  Small
     h2 Server
     fieldset#servers    
-      input#radio_htpt(type='radio', name='ServerAlgo', value='Highest throughput', checked)
+      input#radio_htpt(type='radio', name='serverAlgo', value='Highest throughput', checked)
       label(for='radio_htpt')  Highest throughput
       br
+      input#radio_lpng(type='radio', name='serverAlgo', value='Lowest Ping')
+      label(for='radio_lpng')  Lowest Ping       
     script(type='text/javascript'). 
       var count=0;   
       for (val of $servers) {
@@ -140,21 +170,20 @@ block sidebar
         var radio = document.createElement("input");
         radio.setAttribute('type', 'radio');
         radio.setAttribute('value', 'server'+temp);
-        radio.setAttribute('name', 'ServerAlgo');
+        radio.setAttribute('name', 'serverAlgo');
         var replaced = val.replace(":", "_");
         replaced = replaced.replace(".", "_");
-        radio.setAttribute('id', replaced);
-        console.log("Replaced Server String: "+replaced);
+        radio.setAttribute('id', "radio_"+replaced);
 
         var label = document.createElement("label");
-        label.setAttribute("for",val);
+        label.setAttribute("for",replaced);
         label.innerHTML = "&nbsp"+"Server: "+temp;
 
         var br = document.createElement("br");
 
+        $("#servers").append(br);
         $("#servers").append(radio);
         $("#servers").append(label);
-        $("#servers").append(br);
 
         console.log(val);
         count=count+1;
