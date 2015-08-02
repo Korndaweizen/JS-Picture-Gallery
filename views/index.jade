@@ -27,7 +27,7 @@ block content
       setServer();
 
       var actualImage = new Image();
-      actualImage.src=""+$server+"images/"+$quality+"/"+imgNo+".jpg";
+      actualImage.src=""+$server+"images/"+$quality+"/"+imgNo+".jpg"+"?cachebreaker="+new Date().getTime();
       actualImage.className+="imageContainer"
       actualImage.style.padding = "8px"
       actualImage.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
@@ -71,7 +71,7 @@ block content
         for (val of $servers) {
           console.log(val);
           var replaced = val.replace(":", "_");
-          replaced = val.replace(".", "_");
+          replaced = replaced.replace(".", "_");
           if($("#"+replaced).is(":checked"))
             $server="http://"+val+"/";
         }
@@ -142,8 +142,9 @@ block sidebar
         radio.setAttribute('value', 'server'+temp);
         radio.setAttribute('name', 'ServerAlgo');
         var replaced = val.replace(":", "_");
-        replaced = val.replace(".", "_");
+        replaced = replaced.replace(".", "_");
         radio.setAttribute('id', replaced);
+        console.log("Replaced Server String: "+replaced);
 
         var label = document.createElement("label");
         label.setAttribute("for",val);
