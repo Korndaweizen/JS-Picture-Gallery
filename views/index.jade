@@ -4,6 +4,8 @@ block content
     $quality="medium";
     $server="http://78.46.49.57:21210/";
     $isDrawed=false;
+    $ping=9999999;
+    $temporalBestServer="";
 
     $('html').click(function() {
       $isDrawed=false;
@@ -111,7 +113,9 @@ block content
 
     function setServerByLowestPing() {
       console.log("Server-selection by ping:");
-      pingQueue("",-1);
+      $ping=9999999;
+      var temp=[$ping,"init"];
+      pingQueue(temp,-1);
     }
 
     //function setServerByLowestPing() {
@@ -128,16 +132,29 @@ block content
 
 
     function pingQueue(ret, count) {
-
-        console.log("Server: "+ret[1]+", Ping: "+ret[0]);
-        count++;
-        if(count >=0 && count< $servers.length){
-          ping("http://"+$servers[count]).then(function(retval) {
-            pingQueue(retval,count);
-          }).catch(function(error) {
-            console.log(String(error));
-          });
-        }
+      console.log("Server: "+ret[1]+", Ping: "+ret[0]); 
+      if(count >= 0){
+        var tmpPing=ret[0];
+        var tmpUrl=ret[1];
+        console.log("Server: "+tmpUrl+", Ping: "+tmpPing); 
+        if(tmpPing<$ping){
+          $ping=tmpPing;
+          $temporalBestServer=tmpUrl;
+          console.log("Updated best Server"); 
+        } 
+      }      
+      count++;
+      if(count < $servers.length){
+        ping("http://"+$servers[count]+"/").then(function(retval) {
+          pingQueue(retval,count);
+        }).catch(function(error) {
+          console.log(String(error));
+        });
+      }
+      if(count >= $servers.length && tmpUrl != ""){
+        $server=$temporalBestServer;
+        console.log("Set Server to: "+$server);
+      }
     }
 
     $('body').on('change', 'input[name=serverAlgo]:radio', setServer);
