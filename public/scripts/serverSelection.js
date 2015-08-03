@@ -2,6 +2,12 @@ $server="http://78.46.49.57:21210/";
 $ping=9999999;
 $temporalBestServer="";
 
+$servers=[];
+$.get("/serverlist", function(data, status){
+      $servers=data.availableServers;
+      console.log("Data: " + $servers + "\nStatus: " + status);
+});
+
 function setServer() {
     console.log("Server Settings are being changed:")
     if($("#radio_htpt").is(":checked"))
@@ -89,6 +95,7 @@ function pingQueue(ret, count) {
 }
 
 function addManualSelectors() {
+  console.log("Adding all Servers to Sidebar");
   var count=0;   
   for (val of $servers) {
     var temp=count+1;
