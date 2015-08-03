@@ -6,6 +6,7 @@ $servers=[];
 $.get("/serverlist", function(data, status){
       $servers=data.availableServers;
       console.log("Data: " + $servers + "\nStatus: " + status);
+      addManualSelectors();
 });
 
 function setServer() {
