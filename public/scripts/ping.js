@@ -23,9 +23,11 @@ var ping = function(url, multiplier) {
     return new Promise(function(resolve, reject) {
         var start = (new Date()).getTime();
         var response = function() { 
-            var delta = ((new Date()).getTime() - start);
-            delta *= (multiplier || 1);
-            resolve(delta); 
+            var retval=[];
+            retval[0]= ((new Date()).getTime() - start);
+            retval[0] *= (multiplier || 1);
+            retval[1]=url;
+            resolve(retval); 
         };
         request_image(url).then(response).catch(response);
         

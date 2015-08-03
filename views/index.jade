@@ -111,15 +111,35 @@ block content
 
     function setServerByLowestPing() {
       console.log("Server-selection by ping:");
-      for (val of $servers) {
-        var serverurl= "http://"+val;
-        ping(serverurl).then(function(delta) {
-            console.log("Server: "+val+", Ping: "+delta);
-        }).catch(function(error) {
-            console.log(String(error));
-        });
-      }
+      pingQueue("",-1);
     }
+
+    //function setServerByLowestPing() {
+    //  console.log("Server-selection by ping:");
+    //  for (val of $servers) {
+    //    var serverurl= "http://"+val;
+    //    ping(serverurl).then(function(retval) {
+    //        console.log("Server: "+retval[1]+", Ping: "+retval[0]);
+    //    }).catch(function(error) {
+    //        console.log(String(error));
+    //    });
+    //  }
+    //}
+
+
+    function pingQueue(ret, count) {
+
+        console.log("Server: "+ret[1]+", Ping: "+ret[0]);
+        count++;
+        if(count >=0 && count< $servers.length){
+          ping("http://"+$servers[count]).then(function(retval) {
+            pingQueue(retval,count);
+          }).catch(function(error) {
+            console.log(String(error));
+          });
+        }
+    }
+
     $('body').on('change', 'input[name=serverAlgo]:radio', setServer);
     //$('input[name=serverAlgo]:radio').change(setServer);
     $('body').on('change', 'input[name=qualityAlgo]:radio', setQuality);
