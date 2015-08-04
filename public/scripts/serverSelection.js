@@ -1,6 +1,8 @@
 $server="http://78.46.49.57:21210/";
 $ping=9999999;
 $temporalBestServer="";
+$timer=null;
+$timerInterval=30; //Seconds
 
 $servers=[];
 $.get("/serverlist", function(data, status){
@@ -10,29 +12,17 @@ $.get("/serverlist", function(data, status){
 });
 
 function setServer() {
+    clearInterval($timer);
+
     console.log("Server Settings are being changed:")
     if($("#radio_htpt").is(":checked"))
       setServerByHighestTpt();
-    if($("#radio_lpng").is(":checked"))
+    if($("#radio_lpng").is(":checked")){
       setServerByLowestPing();
+      $timer = setInterval(setServerByLowestPing, $timerInterval*1000);
+    }
     if(!($("#radio_htpt").is(":checked")) && !($("#radio_lpng").is(":checked")))
     {
-      /*
-      {
-        console.log("Server-selection by hand:");
-        var count=1;
-        for (val of $servers) {
-          var replaced = val.replace(":", "_");
-          replaced = replaced.replace(".", "_");
-          console.log("Server_"+count+": "+replaced+ $("#radio_"+replaced).is(":checked"));
-          count=count+1;
-          if($("#radio_"+replaced).is(":checked")){
-            console.log("Setting server!!! Yeah i am the if")
-            $server="http://"+val+"/";
-          }
-        }
-      }
-      */
       console.log("Server-selection by hand:"); //sad method.... the nice one (above) is not working due to some black magic -.-          
       var count=1;
       var checkup=$("input[name=serverAlgo]:checked").val().replace("server","");
