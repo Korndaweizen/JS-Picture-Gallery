@@ -13,7 +13,6 @@ var express = require('express'),
  */
 var app = express()
 
-
 app.set('views', __dirname + '/views')
 app.set('view engine', 'jade')
 app.use(express.logger('dev'))
@@ -29,12 +28,6 @@ app.use(stylus.middleware({
     return stylus(str).set('filename', path).use(nib());
     }
 }));
-app.use(express.static(__dirname + '/public'))
-
-
-
-
-
 	
 if (app.get('env') === 'development') {
     app.locals.pretty = true; //Format html code when in dev
@@ -44,10 +37,6 @@ app.set('port', (process.env.PORT || 21210));
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
-
-//app.listen(3000)
-
-
 
 //read serverlist on startup
 var fs  = require("fs");
@@ -65,7 +54,7 @@ function myMiddleware (req, res, next) {
 }
 
 app.use(myMiddleware);
-
+app.use(express.static(__dirname + '/public'))
 
 /* Redirects
 *
