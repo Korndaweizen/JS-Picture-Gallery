@@ -1,1 +1,1 @@
-supervisor app.js
+node --expose-gc app.js

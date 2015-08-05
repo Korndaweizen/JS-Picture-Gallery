@@ -1,1 +1,1 @@
-supervisor contentserver21211.js
+node --expose-gc contentserver21211.js

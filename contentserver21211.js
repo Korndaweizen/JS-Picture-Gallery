@@ -46,3 +46,14 @@ app.listen(app.get('port'), function() {
 });
 
 
+//fixes server crashed due to memleaks
+function myMiddleware (req, res, next) { 
+   if (req.method === 'GET') { 
+     global.gc();
+   }
+
+   // keep executing the router middleware
+   next()
+}
+
+app.use(myMiddleware);

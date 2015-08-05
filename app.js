@@ -54,6 +54,18 @@ var fs  = require("fs");
 var path = './serverlist';
 var serverArray = fs.readFileSync(path).toString().split('\n');
 
+//fixes server crashed due to memleaks
+function myMiddleware (req, res, next) { 
+   if (req.method === 'GET') { 
+     global.gc();
+   }
+
+   // keep executing the router middleware
+   next()
+}
+
+app.use(myMiddleware);
+
 
 /* Redirects
 *
