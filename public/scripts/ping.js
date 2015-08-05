@@ -56,7 +56,7 @@ var getTpt = function(url, size) {
 
             resolve(speed); 
         };
-        request_image(url).then(response).catch(resolve(-1));
+        request_image(url).then(response).catch(response);
         
         // Set a timeout for max-pings, 5s.
         setTimeout(function() { reject(Error('Timeout')); }, 5000);

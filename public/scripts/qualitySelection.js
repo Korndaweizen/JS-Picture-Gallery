@@ -29,8 +29,8 @@ function setQualityByScreenSize() {
 }
 
 function setQualitybyTpt() {
-    getTpt($server+"images/1mb.jpg", 1018).then(function(asd) {
-      console.log("TpT: "+ asd + "KB/s");
+    getTpt($server+"images/1mb.jpg", 1018).then(function(speed) {
+      console.log("TpT: "+ speed + "KB/s");
     }).catch(function(error) {
       console.log("setQualitybyTpt Error: "+String(error));
     });  
