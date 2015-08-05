@@ -1,8 +1,9 @@
 $server="http://78.46.49.57:21210/";
-$ping=9999999;
+$latency=9999999;
 $temporalBestServer="";
 $timer=null;
 $timerInterval=30; //Seconds
+$latencyArray=[];
 
 $servers=[];
 $.get("/serverlist", function(data, status){
@@ -18,21 +19,12 @@ function setServer() {
     if($("#radio_htpt").is(":checked"))
       setServerByHighestTpt();
     if($("#radio_lpng").is(":checked")){
-      setServerByLowestPing();
-      $timer = setInterval(setServerByLowestPing, $timerInterval*1000);
+      setServerByLowestlatency();
+      $timer = setInterval(setServerByLowestlatency, $timerInterval*1000);
     }
     if(!($("#radio_htpt").is(":checked")) && !($("#radio_lpng").is(":checked")))
     {
-      console.log("Server-selection by hand:"); //sad method.... the nice one (above) is not working due to some black magic -.-          
-      var count=1;
-      var checkup=$("input[name=serverAlgo]:checked").val().replace("server","");
-      for (val of $servers) {
-        if(count==checkup){
-          console.log("Setting server!!! Yeah i am the if")
-          $server="http://"+val+"/";
-        }
-        count=count+1;
-      }
+      setServerByHand();
     }
     console.log('New Server: '+$server);
 }
@@ -40,41 +32,47 @@ function setServerByHighestTpt() {
     console.log("Server-selection by tpt:");
     $server="http://78.46.49.57:21210/";
 }
-function setServerByLowestPing() {
-  console.log("Server-selection by ping:");
-  $ping=9999999;
-  var temp=[$ping,"init"];
-  pingQueue(temp,-1);
+function setServerByLowestlatency() {
+  console.log("Server-selection by latency:");
+  $latency=9999999;
+  var temp=[$latency,"init"];
+  getLatency(temp,-1);
 }
-/*
-function setServerByLowestPing() {
-  console.log("Server-selection by ping:");
+function setServerByHand() {
+  console.log("Server-selection by hand:"); //sad method.... the clean solution was not working due to some black magic -.-          
+  var count=1;
+  var checkup=$("input[name=serverAlgo]:checked").val().replace("server","");
   for (val of $servers) {
-    var serverurl= "http://"+val;
-    ping(serverurl).then(function(retval) {
-        console.log("Server: "+retval[1]+", Ping: "+retval[0]);
-    }).catch(function(error) {
-        console.log(String(error));
-    });
+    if(count==checkup){
+      $server="http://"+val+"/";
+    }
+    count=count+1;
   }
 }
+
+/*
+ *
+ *This function checks the latency of all servers and sets 
+ *the server to the server with the lowest latency once it is finished.
+ *
 */
-function pingQueue(ret, count) {
-  console.log("Server: "+ret[1]+", Ping: "+ret[0]); 
+function getLatency(ret, count) {
+  console.log("Server: "+ret[1]+", latency: "+ret[0]); 
   if(count >= 0){
-    var tmpPing=ret[0];
+    var tmplatency=ret[0];
     var tmpUrl=ret[1];
-    console.log("Server: "+tmpUrl+", Ping: "+tmpPing); 
-    if(tmpPing<$ping){
-      $ping=tmpPing;
-      $temporalBestServer=tmpUrl;
+    $latencyArray[count]=tmplatency;
+    console.log("Server: "+tmpUrl+", latency: "+tmplatency); 
+    if(tmplatency<$latency){
+      $latency=tmplatency;
+      $temporalBestServer=tmpUrl.replace("images/small.bmp", "");
       console.log("Updated best Server"); 
     } 
   }      
   count++;
   if(count < $servers.length){
-    ping("http://"+$servers[count]+"/").then(function(retval) {
-      pingQueue(retval,count);
+    ping("http://"+$servers[count]+"/images/small.bmp").then(function(retval) {
+      getLatency(retval,count);
     }).catch(function(error) {
       console.log(String(error));
     });

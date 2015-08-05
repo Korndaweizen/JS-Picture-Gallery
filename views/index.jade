@@ -81,6 +81,9 @@ block sidebar
       input(type='radio', name='qualityAlgo', value='ownsrcset', id='radio_ownsrcset', checked)
       label(for='radio_ownsrcset')  Reimplemented srcset
       br
+      input(type='radio', name='qualityAlgo', value='qualityByTpt', id='radio_qtpt')
+      label(for='radio_qtpt')  Select by DL-Speed 
+      br
       input(type='radio', name='qualityAlgo', value='Uncompressed', id='radio_uncompressed')
       label(for='radio_uncompressed')   Uncompressed
       br
@@ -91,13 +94,13 @@ block sidebar
       label(for='radio_medium')  Medium
       br
       input(type='radio', name='qualityAlgo', value='Small', id='radio_small')
-      label(for='radio_small')  Small
+      label(for='radio_small')  Small     
     h2 Server
     fieldset#servers    
-      input#radio_htpt(type='radio', name='serverAlgo', value='Highest throughput', checked)
-      label(for='radio_htpt')  Highest throughput
-      br
-      input#radio_lpng(type='radio', name='serverAlgo', value='Lowest Ping')
-      label(for='radio_lpng')  Lowest Ping       
+      //input#radio_htpt(type='radio', name='serverAlgo', value='Highest throughput', checked)
+      //label(for='radio_htpt')  Highest throughput
+      //br
+      input#radio_lpng(type='radio', name='serverAlgo', value='Lowest Latency')
+      label(for='radio_lpng')  Lowest Latency       
 //    script(type='text/javascript'). 
 //      addManualSelectors();
