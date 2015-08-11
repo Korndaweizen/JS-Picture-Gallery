@@ -29,13 +29,7 @@ app.use(stylus.middleware({
     return stylus(str).set('filename', path).use(nib());
     }
 }));
-app.use(express.static(__dirname + '/public'))
 
-
-
-
-
-	
 if (app.get('env') === 'development') {
     app.locals.pretty = true; //Format html code when in dev
 }
@@ -44,7 +38,6 @@ app.set('port', (process.env.PORT || 21211));
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
-
 
 //fixes server crashed due to memleaks
 function myMiddleware (req, res, next) { 
@@ -57,3 +50,4 @@ function myMiddleware (req, res, next) {
 }
 
 app.use(myMiddleware);
+app.use(express.static(__dirname + '/public'))

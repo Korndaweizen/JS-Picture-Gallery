@@ -15,7 +15,10 @@ var app = express()
 
 app.set('views', __dirname + '/views')
 app.set('view engine', 'jade')
-app.use(express.logger('dev'))
+
+logger = require('morgan');
+app.use(logger('dev'));
+
 app.use(session({
     secret: 'anything'
 }));
@@ -59,6 +62,13 @@ app.use(express.static(__dirname + '/public'))
 /* Redirects
 *
 */
+
+    app.post('/logthis',function(req,res){
+      var loggedString=req.body.loggedstring;
+      console.log("Log: "+loggedString);
+      res.end("done");
+    });
+
 	app.get('/', function(req, res) {
 	    res.render('index', {
 	        title: 'Home',

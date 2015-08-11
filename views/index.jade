@@ -2,6 +2,7 @@ extend layout
 block content
   script(src="scripts/serverSelection.js")
   script(src="scripts/qualitySelection.js")
+  script(src="scripts/logging.js")
   script(type='text/javascript').
     $isDrawed=false;  
 
@@ -23,8 +24,6 @@ block content
 
       var a = document.createElement('a');
       imageContainer.appendChild(a);
-      //setQuality();
-      //setServer();
 
       var actualImage = new Image();
       actualImage.src=""+$server+"images/"+$quality+"/"+imgNo+".jpg"+"?cachebreaker="+new Date().getTime();
@@ -40,9 +39,9 @@ block content
       $isDrawed=true;
     }
 
-    $('body').on('change', 'input[name=serverAlgo]:radio', setServer);
+    $('body').on('change', 'input[name=serverAlgo]:radio', changeServerMode);
     //$('input[name=serverAlgo]:radio').change(setServer);
-    $('body').on('change', 'input[name=qualityAlgo]:radio', setQuality);
+    $('body').on('change', 'input[name=qualityAlgo]:radio', changeQualityMode);
 
     setQuality();
     setServer();
@@ -100,7 +99,7 @@ block sidebar
       //input#radio_htpt(type='radio', name='serverAlgo', value='Highest throughput', checked)
       //label(for='radio_htpt')  Highest throughput
       //br
-      input#radio_lpng(type='radio', name='serverAlgo', value='Lowest Latency')
+      input#radio_lpng(type='radio', name='serverAlgo', value='Lowest Latency, checked')
       label(for='radio_lpng')  Lowest Latency       
-//    script(type='text/javascript'). 
-//      addManualSelectors();
+    script(type='text/javascript'). 
+      sendLog("This is a Log");
