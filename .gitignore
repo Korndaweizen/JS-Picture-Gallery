@@ -28,3 +28,4 @@ node_modules
 
 # auto generated CSS files
 *.css
+*_log.txt

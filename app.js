@@ -41,10 +41,15 @@ app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
-//read serverlist on startup
-var fs  = require("fs");
+//read serverlist on startup and create logfile
+var fs = require('fs');
+
+var d= new Date();
+d.setMonth(d.getMonth()+1);
+var dateString= d.getDate() + "_" + d.getMonth() + "__" + d.getHours() + "_" + d.getMinutes();
+var logStream = fs.createWriteStream(dateString + '_log.txt');
 var path = './serverlist';
-var serverArray = fs.readFileSync(path).toString().split('\n');
+var serverArray = fs.readFileSync(path).toString().split('\r\n');
 
 //fixes server crashed due to memleaks
 function myMiddleware (req, res, next) { 
@@ -66,6 +71,7 @@ app.use(express.static(__dirname + '/public'))
     app.post('/logthis',function(req,res){
       var loggedString=req.body.loggedstring;
       console.log("Log: "+loggedString);
+      logStream.write(loggedString+'\r\n');
       res.end("done");
     });
 
