@@ -16,7 +16,7 @@ function changeQualityMode(){
       $qualityMode="Quality_Manual"; 
     if($("#radio_small").is(":checked"))
       $qualityMode="Quality_Manual"; 
-    sendLog("Changed_Quality_Mode ; "+$qualityMode);
+    sendLog("Changed_Quality_Mode "+$qualityMode);
     setQuality();
 }
 
@@ -35,7 +35,7 @@ function setQuality() {
     if($("#radio_small").is(":checked"))
       $quality="small";
     if($qualityMode=="Quality_Manual"){
-      sendLog("Set_New_Quality ; "+$quality+ " ; Mode ; "+$qualityMode);
+      sendLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode);
     }
 }
 
@@ -48,13 +48,13 @@ function setQualityByScreenSize() {
       $quality="medium";
     if (viewportWidth< 320)
       $quality="small";
-    sendLog("Set_New_Quality ; "+$quality+ " ; Mode ; "+$qualityMode + " ; Width ; " + viewportWidth + " ; Height ; "+ viewportHeight);  
+    sendLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " Width " + viewportWidth + " Height "+ viewportHeight);  
 }
 
 function setQualitybyTpt() {
     getTpt($server+"images/1mb.jpg", 1018).then(function(speed) {
-      $throughput=speed;
-      sendLog("Set_New_Quality ; "+$quality+ " ; Mode ; "+$qualityMode + " ; Throughput_In_KB_s ; " + $throughput);
+      $throughput=speed.toFixed(2);
+      sendLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " Throughput_In_KB_s " + $throughput);
     }).catch(function(error) {
       console.log("setQualitybyTpt Error: "+String(error));
     });

@@ -46,8 +46,9 @@ var fs = require('fs');
 
 var d= new Date();
 d.setMonth(d.getMonth()+1);
-var dateString= d.getDate() + "_" + d.getMonth() + "__" + d.getHours() + "_" + d.getMinutes();
-var logStream = fs.createWriteStream(dateString + '_log.txt');
+var dateString= d.getDate() + "_" + d.getMonth() + "_Time_" + d.getHours() + "_" + d.getMinutes();
+var logStream = fs.createWriteStream('./log/'+dateString + '_log.csv');
+logStream.write("\"sep= \"\r\n"); //Separator for csv
 var path = './serverlist';
 var serverArray = fs.readFileSync(path).toString().split('\r\n');
 
@@ -64,6 +65,8 @@ function myMiddleware (req, res, next) {
 app.use(myMiddleware);
 app.use(express.static(__dirname + '/public'))
 
+
+var users=[];
 /* Redirects
 *
 */
@@ -71,11 +74,27 @@ app.use(express.static(__dirname + '/public'))
     app.post('/logthis',function(req,res){
       var loggedString=req.body.loggedstring;
       console.log("Log: "+loggedString);
-      logStream.write(loggedString+'\r\n');
+
+      var sessionID=req.sessionID;
+      var userNumber=users.indexOf(sessionID)
+      if(userNumber==-1){
+        	users.push(sessionID);
+        	userNumber=users.length-1;        	
+        	req.session.userNO=userNumber;
+      }
+
+      console.log(loggedString+" UserID: "+userNumber+ " "+req.session.userNO+ '\r\n');
       res.end("done");
     });
 
 	app.get('/', function(req, res) {
+	    var sessionID=req.sessionID;
+        var userNumber=users.indexOf(sessionID)
+        if(userNumber==-1){
+        	users.push(sessionID);
+        	userNumber=users.length-1;        	
+        	req.session.userNO=userNumber;
+        }
 	    res.render('index', {
 	        title: 'Home',
 	        user: req.user

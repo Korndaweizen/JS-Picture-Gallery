@@ -40,12 +40,8 @@ block content
     }
 
     $('body').on('change', 'input[name=serverAlgo]:radio', changeServerMode);
-    //$('input[name=serverAlgo]:radio').change(setServer);
     $('body').on('change', 'input[name=qualityAlgo]:radio', changeQualityMode);
 
-    setQuality();
-    setServer();
-    
   div(id="picture-container")
     script(type="text/javascript").
       function drawthumbs() {
@@ -99,7 +95,6 @@ block sidebar
       //input#radio_htpt(type='radio', name='serverAlgo', value='Highest throughput', checked)
       //label(for='radio_htpt')  Highest throughput
       //br
-      input#radio_lpng(type='radio', name='serverAlgo', value='Lowest Latency, checked')
-      label(for='radio_lpng')  Lowest Latency       
-    script(type='text/javascript'). 
-      sendLog("This is a Log This is a Log This is a Log This is a Log This is a Log This is a Log This is a Log This is a Log");
+      input#radio_lpng(type='radio', name='serverAlgo', value='Lowest Latency', checked)
+      label(for='radio_lpng')  Lowest Latency
+      br

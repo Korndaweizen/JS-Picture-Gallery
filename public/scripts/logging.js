@@ -1,5 +1,9 @@
 function sendLog(logString) {
-  $.post("http://localhost:21210/logthis",{loggedstring: logString}, function(data){
+  var d= new Date();
+  var timeString = "["+d.getHours() + ":" + d.getMinutes()+ ":" + d.getSeconds() +"]";
+  var timestamp =  d.getTime();
+  logString= timestamp+" Time: "+timeString+" "+logString;
+  $.post("/logthis",{loggedstring: logString}, function(data){
      if(data==='done'){
         console.log("ServerLog: "+ logString);
      } else { 
