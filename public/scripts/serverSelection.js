@@ -82,7 +82,6 @@ function setServerByHand() {
 */
 function getLatency(ret, count) {
   var tmpUrl="";
-  console.log("Serverlist for latencyalgo: " + $servers); 
   if(count >= 0){
     var tmplatency=ret[0];
     tmpUrl=ret[1].replace("images/small.bmp", "");
