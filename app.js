@@ -63,6 +63,21 @@ function myMiddleware (req, res, next) {
 }
 
 app.use(myMiddleware);
+
+//doing serious CORS stuff
+app.all('*', function(req, res, next) {
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE, CONNECT');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Content-Length');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
+  res.setHeader('Access-Control-Expose-Headers', 'Content-Length');
+
+  next();
+});
+
 app.use(express.static(__dirname + '/public'))
 
 
