@@ -11,6 +11,15 @@ block content
       $(".imageContainer").remove();
     });
 
+    function processImg(img) {
+      img.className+="imageContainer"
+      img.style.padding = "8px"
+      img.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
+      img.style.borderRadius = "8px";
+      img.style.height = "auto";
+      img.style.width = "auto";
+    }
+
     function drawpicture(imgNo) {
       if($isDrawed){
         return
@@ -25,16 +34,22 @@ block content
       var a = document.createElement('a');
       imageContainer.appendChild(a);
 
+      imgUrl=""+$server+"images/"+$quality+"/"+imgNo+".jpg"+"?cachebreaker="+new Date().getTime();
+      
       var actualImage = new Image();
-      actualImage.src=""+$server+"images/"+$quality+"/"+imgNo+".jpg"+"?cachebreaker="+new Date().getTime();
-      actualImage.className+="imageContainer"
-      actualImage.style.padding = "8px"
-      actualImage.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
-      actualImage.style.borderRadius = "8px";
-      actualImage.style.height = "auto";
-      actualImage.style.width = "auto";
 
-      a.appendChild(actualImage);
+      if($qualityMode=="Quality_Throughput_OTF"){
+        getTptOTF(imgUrl).then(function(testImg){
+          actualImage=testImg;
+          processImg(actualImage);
+          a.appendChild(actualImage);
+        });
+      }else{
+        actualImage.src= imgUrl
+        processImg(actualImage);
+        a.appendChild(actualImage);
+      }
+
       document.body.appendChild(imageContainer);
       $isDrawed=true;
     }
@@ -77,7 +92,10 @@ block sidebar
       label(for='radio_ownsrcset')  Reimplemented srcset
       br
       input(type='radio', name='qualityAlgo', value='qualityByTpt', id='radio_qtpt')
-      label(for='radio_qtpt')  Select by DL-Speed 
+      label(for='radio_qtpt')  Select by DL-Speed Background
+      br
+      input(type='radio', name='qualityAlgo', value='qualityByTptOTF', id='radio_qtptotf')
+      label(for='radio_qtptotf')  Select by DL-Speed OTF 
       br
       input(type='radio', name='qualityAlgo', value='Uncompressed', id='radio_uncompressed')
       label(for='radio_uncompressed')   Uncompressed

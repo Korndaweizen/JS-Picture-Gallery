@@ -15,15 +15,6 @@ html
         viewportWidth = $(window).width();
         viewportHeight = $(window).height();
         console.log( "Width: "+ viewportWidth + ", Height: " + viewportHeight );
-
-        var request;
-        request = $.ajax({
-          type: "HEAD",
-          url: "images/medium/1.jpg"+"?cachebreaker="+new Date().getTime(),
-          success: function () {
-            console.log("Size is " + request.getResponseHeader("Content-Length"));
-          }
-        });
       });
       $(window).on('resize orientationChange', function(event) {
         viewportWidth = $(window).width();

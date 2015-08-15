@@ -7,7 +7,7 @@
 var request_image = function(url) {
     return new Promise(function(resolve, reject) {
         var img = new Image();
-        img.onload = function() { resolve(img); };
+        img.onload  = function() { resolve(img); };
         img.onerror = function() { reject(url); };
         img.src = url + "?pingcachebreaker="+new Date().getTime();
     });
@@ -31,7 +31,14 @@ var ping = function(url, multiplier) {
             retval[1]=url;
             resolve(retval); 
         };
-        request_image(url).then(response).catch(response);
+        var badResponse = function() { 
+            var retval=[];
+            retval[0]= 99999;
+            retval[0] *= (multiplier || 1);
+            retval[1]=url;
+            resolve(retval); 
+        };        
+        request_image(url).then(response).catch(badResponse);
         
         // Set a timeout for max-pings, 5s.
         setTimeout(function() { reject(Error('Timeout')); }, 5000);
@@ -48,20 +55,25 @@ var ping = function(url, multiplier) {
 var getTpt = function(url, size) {
     return new Promise(function(resolve, reject) {
         var start = (new Date()).getTime();
-        var response = function() { 
+        var response = function(img) { 
+            var ret=[];
             var speed=0;
             speed = ((new Date()).getTime() - start);
             speed = size/speed; // speed= KB/ms
             speed *= 1000 //speed= KB/s
 
-            resolve(speed); 
+            ret[0]=img;
+            ret[1]=speed;
+            resolve(ret); 
         };
-        request_image(url).then(response).catch(response);
+        request_image(url).then(response).catch(function(){resolve(-1);});
         
         // Set a timeout for max-pings, 5s.
         setTimeout(function() { reject(Error('Timeout')); }, 5000);
     });
 };
+
+
 
 function getAllLatencies(ret, count) {
   console.log("Server: "+ret[1]+", latency: "+ret[0]); 

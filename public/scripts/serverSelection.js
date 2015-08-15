@@ -100,7 +100,7 @@ function getLatency(ret, count) {
     ping("http://"+$servers[count]+"/images/small.bmp").then(function(retval) {
       getLatency(retval,count);
     }).catch(function(error) {
-      console.log(String(error));
+      console.log("Error: "+ String(error));
       var errorRetval=[];
       errorRetval[1]="http://"+$servers[count]+"/";
       errorRetval[0]=9999999;
