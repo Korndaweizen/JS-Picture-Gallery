@@ -105,14 +105,14 @@ function getTptOTF(imgUrl) {
 
 function setQualityByTpt(throughput){
   var quality=$quality;
-  if(throughput<1000)
-    $quality="small";
-  if(throughput<2000)
-    $quality="medium";
-  if(throughput<3000)
-    $quality="large";
   if(throughput>=3000)
     $quality="uncompressed";
+  if(throughput<3000)
+    $quality="large";
+  if(throughput<2000)
+    $quality="medium";
+  if(throughput<1000)
+    $quality="small";
   if (quality != $quality)
     sendLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " Throughput_In_KB_s " + throughput);
 }
