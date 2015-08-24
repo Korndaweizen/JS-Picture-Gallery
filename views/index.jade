@@ -4,6 +4,11 @@ block content
   script(src="scripts/qualitySelection.js")
   script(src="scripts/logging.js")
   script(type='text/javascript').
+
+    var spinner=new Image();
+    spinner.src="images/spinner.gif";
+    processImg(spinner);
+
     $isDrawed=false;  
 
     $('html').click(function() {
@@ -33,6 +38,7 @@ block content
 
       var a = document.createElement('a');
       imageContainer.appendChild(a);
+      a.appendChild(spinner);
 
       imgUrl=""+$server+"images/"+$quality+"/"+imgNo+".jpg"+"?cachebreaker="+new Date().getTime();
       
@@ -40,6 +46,7 @@ block content
 
       if($qualityMode=="Quality_Throughput_OTF"){
         getTptOTF(imgUrl).then(function(testImg){
+          spinner.parentNode.removeChild(spinner);
           actualImage=testImg;
           processImg(actualImage);
           a.appendChild(actualImage);
@@ -47,7 +54,9 @@ block content
       }else{
         actualImage.src= imgUrl
         processImg(actualImage);
-        a.appendChild(actualImage);
+        actualImage.onload=function() {
+          spinner.parentNode.removeChild(spinner);
+          a.appendChild(actualImage);};
       }
 
       document.body.appendChild(imageContainer);
@@ -72,15 +81,12 @@ block content
           a.className='imageCreator';
           a.onclick= function() {
             drawpicture(this.data);
+            event.stopPropagation();
           }
 
           pictureContainer.appendChild(a);
           a.appendChild(thumbnail);
         }
-        $('.imageCreator').click(function(event){
-           console.log("Clicked on a, stopped propagation");
-           event.stopPropagation();
-        });
       }  
       drawthumbs();
 block sidebar

@@ -115,4 +115,6 @@ function setQualityByTpt(throughput){
     $quality="small";
   if (quality != $quality)
     sendLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " Throughput_In_KB_s " + throughput);
+  if (quality == $quality)
+    sendLog("Quality_did_not_change "+$quality+ " Mode "+$qualityMode + " Throughput_In_KB_s " + throughput);
 }
