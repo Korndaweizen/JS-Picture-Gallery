@@ -89,8 +89,10 @@ function getTptOTF(imgUrl) {
           var throughput=retval[1].toFixed(2);
           image=retval[0];
           var loadTime= retval[2];
-          sendLog("Current_Quality "+$quality+ " Mode "+$qualityMode + " LoadTime: " + loadTime);
-          setQualityByTpt(throughput);
+          sendLog("Current_Quality "+$quality+ " Mode "+$qualityMode + " LoadTime: " + loadTime + " Throughput_In_KB_s " + throughput);
+          if($qualityMode=="Quality_Throughput_OTF"){
+            setQualityByTpt(throughput);
+          }
           resolve(image);
         }).catch(function(error) {
           reject("setQualitybyTptOTF Error: "+String(error));

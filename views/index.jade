@@ -44,23 +44,23 @@ block content
       
       var actualImage = new Image();
 
-      if($qualityMode=="Quality_Throughput_OTF"){
+      //if($qualityMode=="Quality_Throughput_OTF"){
         getTptOTF(imgUrl).then(function(testImg){
           spinner.parentNode.removeChild(spinner);
           actualImage=testImg;
           processImg(actualImage);
           a.appendChild(actualImage);
         });
-      }else{
-        var start = (new Date()).getTime();
-        actualImage.src= imgUrl
-        processImg(actualImage);
-        actualImage.onload=function() {
-          var loadTime=((new Date()).getTime() - start);
-          spinner.parentNode.removeChild(spinner);
-          a.appendChild(actualImage);
-          sendLog("Current_Quality "+$quality+ " Mode "+$qualityMode + " LoadTime: " + loadTime);};
-      }
+      //}else{
+      //  var start = (new Date()).getTime();
+      //  actualImage.src= imgUrl
+      //  processImg(actualImage);
+      //  actualImage.onload=function() {
+      //    var loadTime=((new Date()).getTime() - start);
+      //    spinner.parentNode.removeChild(spinner);
+      //    a.appendChild(actualImage);
+      //    sendLog("Current_Quality "+$quality+ " Mode "+$qualityMode + " LoadTime: " + loadTime);};
+      //}
 
       document.body.appendChild(imageContainer);
       $isDrawed=true;
