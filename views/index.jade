@@ -52,11 +52,14 @@ block content
           a.appendChild(actualImage);
         });
       }else{
+        var start = (new Date()).getTime();
         actualImage.src= imgUrl
         processImg(actualImage);
         actualImage.onload=function() {
+          var loadTime=((new Date()).getTime() - start);
           spinner.parentNode.removeChild(spinner);
-          a.appendChild(actualImage);};
+          a.appendChild(actualImage);
+          sendLog("Current_Quality "+$quality+ " Mode "+$qualityMode + " LoadTime: " + loadTime);};
       }
 
       document.body.appendChild(imageContainer);

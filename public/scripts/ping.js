@@ -50,7 +50,7 @@ var ping = function(url, multiplier) {
  * Tests connection speed to a server with a "/images/1mb.jpg"
  * @param  {String} url
  * @param  {Int} size - size of the image in KB 
- * @return {Promise} promise that resolves to dlSpeed (seconds, float).
+ * @return {Promise} promise that resolves to an array of img, dlSpeed (seconds, float) and loadTime.
  */
 var getTpt = function(url, size) {
     return new Promise(function(resolve, reject) {
@@ -58,12 +58,14 @@ var getTpt = function(url, size) {
         var response = function(img) { 
             var ret=[];
             var speed=0;
-            speed = ((new Date()).getTime() - start);
-            speed = size/speed; // speed= KB/ms
+            var loadTime=((new Date()).getTime() - start);
+            speed = size/loadTime; // speed= KB/ms
             speed *= 1000 //speed= KB/s
 
             ret[0]=img;
             ret[1]=speed;
+            ret[2]=loadTime;
+
             resolve(ret); 
         };
         request_image(url).then(response).catch(function(){resolve(-1);});

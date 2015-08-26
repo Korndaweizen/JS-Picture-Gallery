@@ -85,9 +85,11 @@ function getTptOTF(imgUrl) {
         imgSize=request.getResponseHeader("Content-Length")/1000;
         console.log("Size is " + imgSize + " KB");
         console.log(request);
-        getTpt(imgUrl, imgSize).then(function(speed) {
-          var throughput=speed[1].toFixed(2);
-          image=speed[0];
+        getTpt(imgUrl, imgSize).then(function(retval) {
+          var throughput=retval[1].toFixed(2);
+          image=retval[0];
+          var loadTime= retval[2];
+          sendLog("Current_Quality "+$quality+ " Mode "+$qualityMode + " LoadTime: " + loadTime);
           setQualityByTpt(throughput);
           resolve(image);
         }).catch(function(error) {
