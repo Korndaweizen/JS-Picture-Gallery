@@ -15,7 +15,7 @@ body {
 .website-title {
   color: #fa5b4d;
 }
-.imageContainer {
+.leImage {
   margin: auto;
   position: fixed;
   top: 0;
@@ -24,6 +24,19 @@ body {
   right: 0;
   max-width: 100%;
   max-height: 80%;
+}
+.imgButton_Previous {
+  left: 0;
+  position: absolute;
+}
+.imgButton_Next {
+  right: 0;
+  position: absolute;
+}
+.imageContainer {
+  max-width: 80%;
+  top: 48%;
+  left: 10%;
 }
 footer {
   position: fixed;

@@ -9,24 +9,35 @@ block content
     spinner.src="images/spinner.gif";
     processImg(spinner);
 
-    $isDrawed=false;  
+    $isDrawed=-1;  
 
     $('html').click(function() {
-      $isDrawed=false;
+      $isDrawed=-1;
       $(".imageContainer").remove();
+      $(".leImage").remove();
     });
 
     function processImg(img) {
-      img.className+="imageContainer"
+      img.className+="leImage"
       img.style.padding = "8px"
       img.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
       img.style.borderRadius = "8px";
       img.style.height = "auto";
       img.style.width = "auto";
+
+    }
+
+    function createButton(context, orientation, func){
+        var button = document.createElement("input");
+        button.type = "button";
+        button.value = orientation;
+        button.className+="imgButton_"+orientation;       
+        button.onclick = func;
+        context.appendChild(button);
     }
 
     function drawpicture(imgNo) {
-      if($isDrawed){
+      if($isDrawed>=1){
         return
       }
       imageContainer = document.createElement("div");
@@ -34,7 +45,15 @@ block content
       imageContainer.style.textAlign = "center";
       imageContainer.style.width = "100%";
       imageContainer.style.height = "auto";
-      imageContainer.className += " imageContainer";     
+      imageContainer.className += " imageContainer";
+
+      if(imgNo>1){
+        createButton(imageContainer, "Previous", function(){
+          event.stopPropagation();
+          $('html').click();
+          drawpicture(imgNo-1);
+        });         
+      }
 
       var a = document.createElement('a');
       imageContainer.appendChild(a);
@@ -44,26 +63,23 @@ block content
       
       var actualImage = new Image();
 
-      //if($qualityMode=="Quality_Throughput_OTF"){
-        getTptOTF(imgUrl).then(function(testImg){
-          spinner.parentNode.removeChild(spinner);
-          actualImage=testImg;
-          processImg(actualImage);
-          a.appendChild(actualImage);
-        });
-      //}else{
-      //  var start = (new Date()).getTime();
-      //  actualImage.src= imgUrl
-      //  processImg(actualImage);
-      //  actualImage.onload=function() {
-      //    var loadTime=((new Date()).getTime() - start);
-      //    spinner.parentNode.removeChild(spinner);
-      //    a.appendChild(actualImage);
-      //    sendLog("Current_Quality "+$quality+ " Mode "+$qualityMode + " LoadTime: " + loadTime);};
-      //}
+      getTptOTF(imgUrl).then(function(testImg){
+        spinner.parentNode.removeChild(spinner);
+        actualImage=testImg;
+        processImg(actualImage);
+        a.appendChild(actualImage);
+      });
+
+      if(imgNo<25){
+        createButton(imageContainer,"Next", function(){
+          event.stopPropagation();
+          $('html').click();
+          drawpicture(imgNo+1);
+        }); 
+      }
 
       document.body.appendChild(imageContainer);
-      $isDrawed=true;
+      $isDrawed=imgNo;
     }
 
     $('body').on('change', 'input[name=serverAlgo]:radio', changeServerMode);
@@ -81,10 +97,13 @@ block content
 
           var a =document.createElement('a');
           a.data=i;
+          a.id='image_'+i;
           a.className='imageCreator';
           a.onclick= function() {
+            if($isDrawed==-1){
+              event.stopPropagation();
+            }
             drawpicture(this.data);
-            event.stopPropagation();
           }
 
           pictureContainer.appendChild(a);
