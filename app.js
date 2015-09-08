@@ -44,13 +44,24 @@ app.listen(app.get('port'), function() {
 //read serverlist on startup and create logfile
 var fs = require('fs');
 
-var d= new Date();
-d.setMonth(d.getMonth()+1);
-var dateString= d.getDate() + "_" + d.getMonth() + "_Time_" + d.getHours() + "_" + d.getMinutes();
-var logStream = fs.createWriteStream('./log/'+dateString + '_log.csv');
-logStream.write("\"sep= \"\r\n"); //Separator for csv
+//variables for logging
+var date= new Date();
+var dateString="";
+var logStream;
+
+//variables for serverlist
 var path = './serverlist';
 var serverArray = fs.readFileSync(path).toString().split('\r\n');
+
+function newLog(){
+  date = new Date();
+  date.setMonth(date.getMonth()+1);
+  dateString= date.getDate() + "_" + date.getMonth() + "_Time_" + date.getHours() + "_" + date.getMinutes();
+  logStream = fs.createWriteStream('./log/'+dateString + '_log.csv');
+  logStream.write("\"sep= \"\r\n"); //Separator for csv
+}
+
+newLog();
 
 //fixes server crashed due to memleaks
 function myMiddleware (req, res, next) { 
@@ -99,8 +110,14 @@ var users=[];
       }
 
       console.log(loggedString+" UserID: "+userNumber+ " "+req.session.userNO+ '\r\n');
+      logStream.write(loggedString+'\r\n')
       res.end("done");
     });
+
+  app.get('/newlog', function(req, res) {
+      newLog();
+      console.log("new logfile created");
+  });
 
 	app.get('/', function(req, res) {
 	    var sessionID=req.sessionID;
@@ -114,35 +131,33 @@ var users=[];
 	        title: 'Home',
 	        user: req.user
 	    })
-	})
+	});
 	app.get('/serverlist', function(req, res) {
 		res.json({
             availableServers: serverArray
         });
-	})	
+	});
 	app.get('/srcSet', function(req, res) {
 	    res.render('srcSet', {
 	        title: 'Source Set Algo',
 	        user: req.user
 	    })
-	})
+	});
 	app.get('/srcSet2', function(req, res) {
 	    res.render('srcSet2', {
 	        title: 'Original SRCSET',
 	        user: req.user
 	    })
-	})
+	});
 	app.get('/about', function(req, res) {
 	    res.render('about', {
 	        title: 'About',
 	        user: req.user
 	    })
-	})
+	});
 	app.get('/contact', function(req, res) {
 	    res.render('contact', {
 	        title: 'Contact',
 	        user: req.user
 	    })
-	})
-
-
+	});

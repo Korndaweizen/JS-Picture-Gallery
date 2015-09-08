@@ -12,6 +12,12 @@ function sendLog(logString) {
   });	
 }
 
+function newLog(){
+  $.get("/newlog", function(data, status){
+        alert("Data: " + data + "\nStatus: " + status);
+    });
+}
+
 String.prototype.replaceAll = function(search, replace)
 {
     //if replace is not sent, return original string otherwise it will
