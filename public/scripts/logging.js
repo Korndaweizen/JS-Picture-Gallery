@@ -1,3 +1,31 @@
+function sendQualityLog(logString) {
+  var d= new Date();
+  var timeString = "["+d.getHours() + ":" + d.getMinutes()+ ":" + d.getSeconds() +"]";
+  var timestamp =  d.getTime();
+  logString= timestamp+" Time: "+timeString+" "+logString;
+  $.post("/logQuality",{loggedstring: logString}, function(data){
+     if(data==='done'){
+        console.log("QLog: "+ logString);
+     } else { 
+      console.log("QLog failed: "+ logString);
+     }
+  }); 
+}
+
+function sendServerLog(logString) {
+  var d= new Date();
+  var timeString = "["+d.getHours() + ":" + d.getMinutes()+ ":" + d.getSeconds() +"]";
+  var timestamp =  d.getTime();
+  logString= timestamp+" Time: "+timeString+" "+logString;
+  $.post("/logServer",{loggedstring: logString}, function(data){
+     if(data==='done'){
+        console.log("SLog: "+ logString);
+     } else { 
+      console.log("SLog failed: "+ logString);
+     }
+  }); 
+}
+
 function sendLog(logString) {
   var d= new Date();
   var timeString = "["+d.getHours() + ":" + d.getMinutes()+ ":" + d.getSeconds() +"]";
@@ -5,11 +33,11 @@ function sendLog(logString) {
   logString= timestamp+" Time: "+timeString+" "+logString;
   $.post("/logthis",{loggedstring: logString}, function(data){
      if(data==='done'){
-        console.log("ServerLog: "+ logString);
+        console.log("Log: "+ logString);
      } else { 
-     	console.log("ServerLog failed: "+ logString);
+      console.log("Log failed: "+ logString);
      }
-  });	
+  }); 
 }
 
 function newLog(){

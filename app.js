@@ -48,6 +48,8 @@ var fs = require('fs');
 var date= new Date();
 var dateString="";
 var logStream;
+var logServerStream;
+var LogQualityStream;
 
 //variables for serverlist
 var path = './serverlist';
@@ -59,6 +61,12 @@ function newLog(){
   dateString= date.getDate() + "_" + date.getMonth() + "_Time_" + date.getHours() + "_" + date.getMinutes();
   logStream = fs.createWriteStream('./log/'+dateString + '_log.csv');
   logStream.write("\"sep= \"\r\n"); //Separator for csv
+
+  logServerStream = fs.createWriteStream('./log/server_'+dateString + '_log.csv');
+  logServerStream.write("\"sep= \"\r\n"); //Separator for csv
+
+  logQualityStream = fs.createWriteStream('./log/quality_'+dateString + '_log.csv');
+  logQualityStream.write("\"sep= \"\r\n"); //Separator for csv
 }
 
 newLog();
@@ -97,22 +105,59 @@ var users=[];
 *
 */
 
-    app.post('/logthis',function(req,res){
-      var loggedString=req.body.loggedstring;
-      console.log("Log: "+loggedString);
+  app.post('/logthis',function(req,res){
+    var loggedString=req.body.loggedstring;
+    //console.log("Log: "+loggedString);
+    
+    var sessionID=req.sessionID;
+    var userNumber=users.indexOf(sessionID)
+    if(userNumber==-1){
+        users.push(sessionID);
+        userNumber=users.length-1;          
+        req.session.userNO=userNumber;
+    }
+    
+    loggedString=loggedString+" UserID: "+userNumber+ " "+req.session.userNO+ '\r\n';
+    console.log(loggedString);
+    logStream.write(loggedString);
+    res.end("done");
+  });
 
-      var sessionID=req.sessionID;
-      var userNumber=users.indexOf(sessionID)
-      if(userNumber==-1){
-        	users.push(sessionID);
-        	userNumber=users.length-1;        	
-        	req.session.userNO=userNumber;
-      }
+  app.post('/logServer',function(req,res){
+    var loggedString=req.body.loggedstring;
+    //console.log("Log: "+loggedString);
+    
+    var sessionID=req.sessionID;
+    var userNumber=users.indexOf(sessionID)
+    if(userNumber==-1){
+        users.push(sessionID);
+        userNumber=users.length-1;          
+        req.session.userNO=userNumber;
+    }
 
-      console.log(loggedString+" UserID: "+userNumber+ " "+req.session.userNO+ '\r\n');
-      logStream.write(loggedString+'\r\n')
-      res.end("done");
-    });
+    loggedString=loggedString+" UserID: "+userNumber+ " "+req.session.userNO+ '\r\n';
+    console.log(loggedString);
+    logServerStream.write(loggedString);
+    res.end("done");
+  });
+
+  app.post('/logQuality',function(req,res){
+    var loggedString=req.body.loggedstring;
+    //console.log("Log: "+loggedString);
+    
+    var sessionID=req.sessionID;
+    var userNumber=users.indexOf(sessionID)
+    if(userNumber==-1){
+        users.push(sessionID);
+        userNumber=users.length-1;          
+        req.session.userNO=userNumber;
+    }
+    
+    loggedString=loggedString+" UserID: "+userNumber+ " "+req.session.userNO+ '\r\n';
+    console.log(loggedString);
+    logQualityStream.write(loggedString)
+    res.end("done");
+  });
 
   app.get('/newlog', function(req, res) {
       newLog();

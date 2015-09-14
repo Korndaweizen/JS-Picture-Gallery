@@ -31,7 +31,7 @@ function changeServerMode(){
     if(!($("#radio_htpt").is(":checked")) && !($("#radio_lpng").is(":checked"))){
       $serverMode=$MANUAL;
     }
-    sendLog("Changed_Server_Mode "+$serverMode);
+    sendServerLog("Changed_Server_Mode "+$serverMode);
     setServer();
 }
 
@@ -53,7 +53,7 @@ function setServer() {
 function setServerByHighestTpt() {
     console.log("Server-selection by tpt:");
     $server="http://78.46.49.57:21210/";
-    sendLog("Set_New_Server "+$server+ " Mode "+$serverMode);    
+    sendServerLog("Set_New_Server "+$server+ " Mode "+$serverMode);    
 }
 function setServerByLowestlatency() {
   console.log("Server-selection by latency:");
@@ -68,7 +68,7 @@ function setServerByHand() {
   for (val of $servers) {
     if(count==checkup){
       $server="http://"+val+"/";
-      sendLog("Set_New_Server "+$server+ " Mode "+$serverMode);
+      sendServerLog("Set_New_Server "+$server+ " Mode "+$serverMode);
     }
     count=count+1;
   }
@@ -86,12 +86,12 @@ function getLatency(ret, count) {
     var tmplatency=ret[0];
     tmpUrl=ret[1].replace("images/small.bmp", "");
     $latencyArray[count]=tmplatency;
-    sendLog("Evaluate_Server "+tmpUrl+ " Mode "+$serverMode + " Latency "+ tmplatency);
+    sendServerLog("Evaluate_Server "+tmpUrl+ " Mode "+$serverMode + " Latency "+ tmplatency);
     //console.log("Server: "+tmpUrl+", latency: "+tmplatency); 
     if(tmplatency<$latency){
       $latency=tmplatency;
       $temporalBestServer=tmpUrl;
-      sendLog("Updated_Best_Server "+tmpUrl+ " Mode "+$serverMode + " Latency "+ tmplatency); 
+      sendServerLog("Updated_Best_Server "+tmpUrl+ " Mode "+$serverMode + " Latency "+ tmplatency); 
     } 
   }      
   count++;
@@ -108,7 +108,7 @@ function getLatency(ret, count) {
   }
   if(count >= $servers.length && tmpUrl != ""){
     $server=$temporalBestServer;
-    sendLog("Set_New_Server "+$server+ " Mode "+$serverMode + " Latency "+ $latency);
+    sendServerLog("Set_New_Server "+$server+ " Mode "+$serverMode + " Latency "+ $latency);
   }
 }
 
