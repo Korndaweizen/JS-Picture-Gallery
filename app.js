@@ -58,7 +58,7 @@ var serverArray = fs.readFileSync(path).toString().split('\r\n');
 function newLog(){
   date = new Date();
   date.setMonth(date.getMonth()+1);
-  dateString= date.getDate() + "_" + date.getMonth() + "_Time_" + date.getHours() + "_" + date.getMinutes();
+  dateString= date.getDate() + "_" + date.getMonth() + "_Time_" + date.getHours() + "_" + date.getMinutes()+"_"+date.getSeconds();
   logStream = fs.createWriteStream('./log/'+dateString + '_log.csv');
   logStream.write("\"sep= \"\r\n"); //Separator for csv
 
@@ -67,6 +67,9 @@ function newLog(){
 
   logQualityStream = fs.createWriteStream('./log/quality_'+dateString + '_log.csv');
   logQualityStream.write("\"sep= \"\r\n"); //Separator for csv
+  console.log("new logfiles created");
+  var end =new Date();
+  console.log("Took "+end+"_"+date+" mseconds");
 }
 
 newLog();
@@ -159,9 +162,9 @@ var users=[];
     res.end("done");
   });
 
-  app.get('/newlog', function(req, res) {
+  app.post('/newlog', function(req, res) {
       newLog();
-      console.log("new logfile created");
+      res.end("done");
   });
 
 	app.get('/', function(req, res) {

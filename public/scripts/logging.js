@@ -41,9 +41,16 @@ function sendLog(logString) {
 }
 
 function newLog(){
-  $.get("/newlog", function(data, status){
-        alert("Data: " + data + "\nStatus: " + status);
-    });
+  //$.post("/newlog", function(data, status){
+  //      alert("Data: " + data + "\nStatus: " + status);
+  //  });
+  $.post("/newlog",{}, function(data){
+     if(data==='done'){
+        console.log("Log: "+ status);
+     } else { 
+      console.log("Log failed: "+ status);
+     }
+  }); 
 }
 
 String.prototype.replaceAll = function(search, replace)

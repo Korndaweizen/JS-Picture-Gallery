@@ -3,6 +3,13 @@ var numberOfTestPictures = 10;
 var numberOfTestRuns = 10;
 
 
+function justWait(time,callback){
+    setTimeout(function() {
+        callback();
+    }, time);
+}
+
+
 /**
  * Wait until the test condition is true or a timeout occurs. Useful for waiting
  * on a server response or for a ui change (fadeIn, etc.) to occur.
@@ -58,17 +65,7 @@ function waitForPictureRecursive(counter) {
           $(".imgButton_Next").click();
       });
       waitForPictureVisible( function() {
-        //if(counter>0){
           waitForPictureRecursive(counter-1);
-        //}
-        //else{
-        //  //reset page make ready for new tests
-        //  page.evaluate(function(){
-        //      $('html').click();
-        //      $readyForTesting=true;
-        //  });
-        //  page.render('example_fin.png');
-        //}
       });
     }
     else{
@@ -81,8 +78,8 @@ function waitForPictureRecursive(counter) {
     }
 }
 
-function waitForTestRowFinished(onReady, timeOutMillis) {
-    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 120000; //< Default Max Timout is 120s  
+function waitForReadyForTesting(onReady, timeOutMillis) {
+    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 6000000; //< Default Max Timout is 600s  
 
     // Wait for 'centered picture' to be visible
     waitFor(function() {
@@ -94,16 +91,21 @@ function waitForTestRowFinished(onReady, timeOutMillis) {
 }
 
 function waitForTestingRecursive(counter) {
-    console.log("Test Row "+counter+":")
-    runTestRow(numberOfTestPictures);
-    waitForTestRowFinished( function() {
-      if(counter>0){
-        waitForTestingRecursive(counter-1);
+    if(counter>0){
+        console.log("Test Row "+counter+":")
+        page.evaluate(function() {
+            newLog();
+        });
+        justWait(10000, function(){
+        	runTestRow(numberOfTestPictures);
+        	waitForReadyForTesting( function() {
+                  waitForTestingRecursive(counter-1);
+            });
+        });
       }
-      else{
+    else{
         phantom.exit();
-      }
-    });
+    }    
 }
 
 function runTestRow(noOfPictures) {
@@ -118,9 +120,11 @@ function runTestRow(noOfPictures) {
 }
 
 function runTestSet(numberOfTestPictures, numberOfTestRuns) {
-    waitForTestRowFinished( function() {
+    waitForReadyForTesting( function() {
         console.log("Starting Test Row");
         page.evaluate(function() {
+        	//var tests = ['radio_ownsrcset', 'radio_qtpt', 'radio_qtptotf', 'radio_uncompressed', 'radio_large', 'radio_medium', 'radio_small'];
+        	//var count =0;
             $("#"+tests[testCount]).click();
             testCount++;
         });
@@ -135,6 +139,9 @@ page.viewportSize = { width: 1024, height: 768 };
     console.log("Status: " + status);
     if(status === "success") {
       runTestSet(numberOfTestPictures, numberOfTestRuns);
+    }
+    else{
+    	phantom.exit();
     }
   });
 //});
