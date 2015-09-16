@@ -3,6 +3,9 @@ logs
 *.log
 *.csv
 
+# PNGs
+*.png
+
 # Runtime data
 pids
 *.pid
