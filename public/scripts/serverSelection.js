@@ -1,3 +1,4 @@
+
 $server="http://78.46.49.57:21210/";
 $latency=9999999;
 $temporalBestServer="";
@@ -11,6 +12,8 @@ $LOWEST_LATENCY="Server_Lowest_Latency";
 $MANUAL="Server_Manual";
 
 $servers=[];
+
+$startup=true;
 
 $.get("/serverlist", function(data, status){
       $servers=data.availableServers;
@@ -33,7 +36,8 @@ function changeServerMode(){
     }
     sendServerLog("Changed_Server_Mode "+$serverMode);
     setServer();
-}
+};
+
 
 function setServer() {
     clearInterval($timer);
@@ -41,6 +45,7 @@ function setServer() {
     console.log("Server is going to be changed:")
     if($serverMode==$HIGHEST_THROUGHPUT){
       setServerByHighestTpt();
+      $timer = setInterval(setServerByHighestTpt, $timerInterval*1000);
     }
     if($serverMode=="Server_Lowest_Latency"){
       setServerByLowestlatency();
@@ -48,31 +53,35 @@ function setServer() {
     }
     if($serverMode==$MANUAL){
       setServerByHand();
+      $timer = setInterval(setServerByHand, $timerInterval*1000);
     }
-}
+};
+
 function setServerByHighestTpt() {
     console.log("Server-selection by tpt:");
     $server="http://78.46.49.57:21210/";
     sendServerLog("Set_New_Server "+$server+ " Mode "+$serverMode);    
-}
+};
+
 function setServerByLowestlatency() {
   console.log("Server-selection by latency:");
   $latency=9999999;
   var temp=[$latency,"init"];
   getLatency(temp,-1);
-}
+};
+
 function setServerByHand() {
   console.log("Server-selection by hand:"); //sad method.... the clean solution was not working due to some black magic -.-          
   var count=1;
   var checkup=$("input[name=serverAlgo]:checked").val().replace("server","");
-  for (val of $servers) {
+  for (var i=0; i<$servers.length; i++) {
     if(count==checkup){
-      $server="http://"+val+"/";
+      $server="http://"+$servers[i]+"/";
       sendServerLog("Set_New_Server "+$server+ " Mode "+$serverMode);
     }
     count=count+1;
   }
-}
+};
 
 /*
  *
@@ -80,6 +89,7 @@ function setServerByHand() {
  *the server to the server with the lowest latency once it is finished.
  *
 */
+
 function getLatency(ret, count) {
   var tmpUrl="";
   if(count >= 0){
@@ -108,21 +118,25 @@ function getLatency(ret, count) {
   }
   if(count >= $servers.length && tmpUrl != ""){
     $server=$temporalBestServer;
+    if($startup){
+       $readyForTesting=true;
+       $startup=false;
+    }
     sendServerLog("Set_New_Server "+$server+ " Mode "+$serverMode + " Latency "+ $latency);
   }
-}
+};
 
 function addManualSelectors() {
   console.log("Adding all Servers to Sidebar");
-  var count=0;   
-  for (val of $servers) {
-    var temp=count+1;
+
+  for (var i=0; i<$servers.length; i++) {
+    var temp=i+1;
     var radio = document.createElement("input");
     radio.setAttribute('type', 'radio');
     radio.setAttribute('value', 'server'+temp);
     radio.setAttribute('name', 'serverAlgo');
 
-    var replaced = val.replace(":", "_");
+    var replaced = $servers[i].replace(":", "_");
     replaced = replaced.replace(".", "_");
     radio.setAttribute('id', "radio_"+replaced);
 
@@ -136,7 +150,6 @@ function addManualSelectors() {
     var br = document.createElement("br");
     $("#servers").append(br);
 
-    console.log(val);
-    count=count+1;
+    console.log($servers[i]);
   }  
-}
+};

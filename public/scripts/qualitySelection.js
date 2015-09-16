@@ -19,7 +19,7 @@ function changeQualityMode(){
       $qualityMode="Quality_Manual"; 
     sendQualityLog("Changed_Quality_Mode "+$qualityMode + " ServerIP " + $server);
     setQuality();
-}
+};
 
 function setQuality() {
     console.log("Quality Settings are being changed:")
@@ -42,7 +42,7 @@ function setQuality() {
     if($qualityMode=="Quality_Manual"){
       sendQualityLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " ServerIP " + $server);
     }
-}
+};
 
 function setQualityByScreenSize() {
     console.log("screen.Width: "+screen.width);
@@ -54,7 +54,7 @@ function setQualityByScreenSize() {
     if (viewportWidth< 320)
       $quality="small";
     sendQualityLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " Width " + viewportWidth + " Height "+ viewportHeight + " ServerIP " + $server);  
-}
+};
 
 function getTptBackground() {
     getTpt($server+"images/1mb.jpg", 1018).then(function(speed) {
@@ -63,7 +63,7 @@ function getTptBackground() {
     }).catch(function(error) {
       console.log("getTpt Error: "+String(error));
     });
-}
+};
 
 /**
  * Pings a url.
@@ -71,7 +71,7 @@ function getTptBackground() {
  * @param  {Number} multiplier - optional, factor to adjust the ping by.  0.3 works well for HTTP servers.
  * @return {Promise} promise that resolves to a ping (ms, float).
  */
-function getTptOTF(imgUrl) {
+function getTptOTF(imgUrl,imgNo) {
   return new Promise(function(resolve, reject) {
 
     var request;
@@ -89,7 +89,7 @@ function getTptOTF(imgUrl) {
           var throughput=retval[1].toFixed(2);
           image=retval[0];
           var loadTime= retval[2];
-          sendQualityLog("Current_Quality "+$quality+ " Mode "+$qualityMode + " LoadTime: " + loadTime + " Throughput_In_KB_s " + throughput + " ServerIP " + $server);
+          sendQualityLog("Current_Quality "+$quality+ " Mode "+$qualityMode + " LoadTime: " + loadTime + " ImgSize: " + request.getResponseHeader("Content-Length") + " Throughput_In_KB_s " + throughput + " Picture: " + imgNo +" ServerIP " + $server);
           if($qualityMode=="Quality_Throughput_OTF"){
             setQualityByTpt(throughput);
           }
@@ -105,7 +105,7 @@ function getTptOTF(imgUrl) {
     var timeoutMinutes=timeoutMs/60000
     setTimeout(function() { reject(Error('Timeout: '+timeoutMinutes+'min')); }, timeoutMs);
   });
-}
+};
 
 function setQualityByTpt(throughput){
   var quality=$quality;
@@ -113,12 +113,12 @@ function setQualityByTpt(throughput){
     $quality="uncompressed";
   if(throughput<3000)
     $quality="large";
-  if(throughput<2000)
+  if(throughput<300)
     $quality="medium";
-  if(throughput<1000)
+  if(throughput<100)
     $quality="small";
   if (quality != $quality)
     sendQualityLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " Throughput_In_KB_s " + throughput + " ServerIP " + $server);
   if (quality == $quality)
     sendQualityLog("Quality_did_not_change "+$quality+ " Mode "+$qualityMode + " Throughput_In_KB_s " + throughput + " ServerIP " + $server);
-}
+};

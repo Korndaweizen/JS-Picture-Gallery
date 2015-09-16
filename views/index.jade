@@ -1,9 +1,13 @@
 extend layout
 block content
-  script(src="scripts/serverSelection.js")
-  script(src="scripts/qualitySelection.js")
-  script(src="scripts/logging.js")
+  script(type='text/javascript' src="scripts/Promise.js")
+  script(type='text/javascript' src="scripts/serverSelection.js")
+  script(type='text/javascript' src="scripts/qualitySelection.js")
+  script(type='text/javascript' src="scripts/logging.js")
   script(type='text/javascript').
+    var tests = ['radio_ownsrcset', 'radio_qtpt', 'radio_qtptotf', 'radio_uncompressed', 'radio_large', 'radio_medium', 'radio_small'];
+    var testCount = 0;
+    $readyForTesting=false;
 
     var spinner=new Image();
     spinner.src="images/spinner.gif";
@@ -14,11 +18,10 @@ block content
     $('html').click(function() {
       $isDrawed=-1;
       $(".imageContainer").remove();
-      $(".leImage").remove();
+      $(".centered_image").remove();
     });
 
     function processImg(img) {
-      img.className+="leImage"
       img.style.padding = "8px"
       img.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
       img.style.borderRadius = "8px";
@@ -48,7 +51,7 @@ block content
       imageContainer.className += " imageContainer";
 
       if(imgNo>1){
-        createButton(imageContainer, "Previous", function(){
+        createButton(imageContainer, "Previous", function(event){
           event.stopPropagation();
           $('html').click();
           drawpicture(imgNo-1);
@@ -63,15 +66,16 @@ block content
       
       var actualImage = new Image();
 
-      getTptOTF(imgUrl).then(function(testImg){
+      getTptOTF(imgUrl,imgNo).then(function(testImg){
         spinner.parentNode.removeChild(spinner);
         actualImage=testImg;
         processImg(actualImage);
+        actualImage.className+="centered_image"
         a.appendChild(actualImage);
       });
 
       if(imgNo<25){
-        createButton(imageContainer,"Next", function(){
+        createButton(imageContainer,"Next", function(event){
           event.stopPropagation();
           $('html').click();
           drawpicture(imgNo+1);
@@ -99,7 +103,7 @@ block content
           a.data=i;
           a.id='image_'+i;
           a.className='imageCreator';
-          a.onclick= function() {
+          a.onclick= function(event) {
             if($isDrawed==-1){
               event.stopPropagation();
             }
@@ -116,25 +120,25 @@ block sidebar
     h1 Algorithms
     h2 Quality
     fieldset
-      input(type='radio', name='qualityAlgo', value='ownsrcset', id='radio_ownsrcset', checked)
+      input(type='radio', name='qualityAlgo', value='radio_ownsrcset', id='radio_ownsrcset', checked)
       label(for='radio_ownsrcset')  Reimplemented srcset
       br
-      input(type='radio', name='qualityAlgo', value='qualityByTpt', id='radio_qtpt')
+      input(type='radio', name='qualityAlgo', value='radio_qtpt', id='radio_qtpt')
       label(for='radio_qtpt')  Select by DL-Speed Background
       br
-      input(type='radio', name='qualityAlgo', value='qualityByTptOTF', id='radio_qtptotf')
+      input(type='radio', name='qualityAlgo', value='radio_qtptotf', id='radio_qtptotf')
       label(for='radio_qtptotf')  Select by DL-Speed OTF 
       br
-      input(type='radio', name='qualityAlgo', value='Uncompressed', id='radio_uncompressed')
+      input(type='radio', name='qualityAlgo', value='radio_uncompressed', id='radio_uncompressed')
       label(for='radio_uncompressed')   Uncompressed
       br
-      input(type='radio', name='qualityAlgo', value='Large', id='radio_large')
+      input(type='radio', name='qualityAlgo', value='radio_large', id='radio_large')
       label(for='radio_large')  Large
       br
-      input(type='radio', name='qualityAlgo', value='Medium', id='radio_medium')
+      input(type='radio', name='qualityAlgo', value='radio_medium', id='radio_medium')
       label(for='radio_medium')  Medium
       br
-      input(type='radio', name='qualityAlgo', value='Small', id='radio_small')
+      input(type='radio', name='qualityAlgo', value='radio_small', id='radio_small')
       label(for='radio_small')  Small     
     h2 Server
     fieldset#servers    
