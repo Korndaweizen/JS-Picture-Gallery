@@ -53,6 +53,20 @@ function newLog(){
   }); 
 }
 
+function newQLog(){
+  //$.post("/newlog", function(data, status){
+  //      alert("Data: " + data + "\nStatus: " + status);
+  //  });
+  $.post("/newQLog",{}, function(data){
+     if(data==='done'){
+        console.log("Log: "+ status);
+     } else { 
+      console.log("Log failed: "+ status);
+     }
+  }); 
+}
+
+
 String.prototype.replaceAll = function(search, replace)
 {
     //if replace is not sent, return original string otherwise it will

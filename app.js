@@ -72,6 +72,18 @@ function newLog(){
   console.log("Took "+end+"_"+date+" mseconds");
 }
 
+function newQLog(){
+  date = new Date();
+  date.setMonth(date.getMonth()+1);
+  dateString= date.getDate() + "_" + date.getMonth() + "_Time_" + date.getHours() + "_" + date.getMinutes()+"_"+date.getSeconds();
+
+  logQualityStream = fs.createWriteStream('./log/quality_'+dateString + '_log.csv');
+  logQualityStream.write("\"sep= \"\r\n"); //Separator for csv
+  console.log("new logfiles created");
+  var end =new Date();
+  console.log("Took "+end+"_"+date+" mseconds");
+}
+
 newLog();
 
 //fixes server crashed due to memleaks
@@ -164,6 +176,11 @@ var users=[];
 
   app.post('/newlog', function(req, res) {
       newLog();
+      res.end("done");
+  });
+
+  app.post('/newQLog', function(req, res) {
+      newQLog();
       res.end("done");
   });
 

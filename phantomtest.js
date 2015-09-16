@@ -58,7 +58,7 @@ function waitForPictureVisible(onReady, timeOutMillis) {
 }
 
 function waitForPictureRecursive(counter) {
-    page.render('example_'+(counter+1)+'.png');
+    //page.render('example_'+(counter+1)+'.png');
     console.log("Picture "+(counter+1)+" should be visible now.");
     if(counter>0){
       page.evaluate(function() {
@@ -74,7 +74,7 @@ function waitForPictureRecursive(counter) {
           $('html').click();
           $readyForTesting=true;
       });
-      page.render('example_fin.png');
+      //page.render('example_fin.png');
     }
 }
 
@@ -93,9 +93,9 @@ function waitForReadyForTesting(onReady, timeOutMillis) {
 function waitForTestingRecursive(counter) {
     if(counter>0){
         console.log("Test Row "+counter+":")
-        page.evaluate(function() {
-            newLog();
-        });
+        //page.evaluate(function() {
+        //    newLog();
+        //});
         justWait(10000, function(){
         	runTestRow(numberOfTestPictures);
         	waitForReadyForTesting( function() {
@@ -121,6 +121,9 @@ function runTestRow(noOfPictures) {
 
 function runTestSet(numberOfTestPictures, numberOfTestRuns) {
     waitForReadyForTesting( function() {
+        page.evaluate(function() {
+            newLog();
+        });
         console.log("Starting Test Row");
         page.evaluate(function() {
         	//var tests = ['radio_ownsrcset', 'radio_qtpt', 'radio_qtptotf', 'radio_uncompressed', 'radio_large', 'radio_medium', 'radio_small'];
