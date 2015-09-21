@@ -1,0 +1,762 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"con",
+				"console"
+			],
+			[
+				"im",
+				"imgNo"
+			],
+			[
+				"img",
+				"imgUrl"
+			],
+			[
+				"test",
+				"testCount"
+			],
+			[
+				"run",
+				"runTestRow"
+			],
+			[
+				"wait",
+				"waitForTestReady"
+			],
+			[
+				"ne",
+				"nextReady"
+			],
+			[
+				"for",
+				"for	for (…) {…}"
+			],
+			[
+				"pic",
+				"noOfPictures"
+			],
+			[
+				"no",
+				"noOfPictures"
+			],
+			[
+				"ser",
+				"servers"
+			],
+			[
+				"proto",
+				"prototype"
+			],
+			[
+				"Server",
+				"ServerSelector"
+			],
+			[
+				"server",
+				"serverSelector"
+			],
+			[
+				"qual",
+				"qualitySelector"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"Ser",
+				"serverSelector"
+			],
+			[
+				"change",
+				"changeQualityMode"
+			],
+			[
+				"chan",
+				"changeServerMode"
+			],
+			[
+				"image",
+				"imageContainer"
+			],
+			[
+				"ima",
+				"imageContainer"
+			],
+			[
+				"tick",
+				"ticksound"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"a",
+				"avatar-box"
+			],
+			[
+				"s",
+				"size"
+			],
+			[
+				"pull",
+				"pull-right"
+			],
+			[
+				"pu",
+				"pull-left"
+			],
+			[
+				"st",
+				"style"
+			],
+			[
+				"S",
+				"SteamAPIKey"
+			],
+			[
+				"req",
+				"require"
+			],
+			[
+				"ma",
+				"margin-top"
+			],
+			[
+				"nav",
+				"navbar"
+			],
+			[
+				"vec",
+				"vecB"
+			],
+			[
+				"nor",
+				"norm"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "eval.m",
+			"settings":
+			{
+				"buffer_size": 1994,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Korn/Desktop/Algorithms_Relevant_Data.txt",
+			"settings":
+			{
+				"buffer_size": 2293,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "save2Files2.m",
+			"settings":
+			{
+				"buffer_size": 1057,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "%%\nclear all\n\n\n%% Setup variables\n%Uni\nplot_path='C:\\Users\\Steffen\\Dropbox\\BA\\Messungen\\';\n%Home\nplot_path='C:\\Users\\Korn\\Dropbox\\Uni\\Semester 6\\BA\\Messungen\\';\n\nruns=[1:10]\nmode='720'        %Options: 1080, 720, 480, 320, quarters, thirds\nclip='Bunny'  %Options: Bunny, Waterworld\nfor j=runs\n    current_folder = fullfile([plot_path clip '\\' mode '\\run ' num2str(j)],'*.csv');\n    dirListing = dir(current_folder);\n    number_of_files = length(dirListing);\n\n    \n    \n    for i=1:number_of_files\n        fileID = fopen(fullfile([plot_path clip '\\' mode '\\run ' num2str(j)],dirListing(i).name));\n        if i==2\n            %Server\n            C = textscan(fileID,'%*s %d %*s %*s %*s %*s %*s %f %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s');\n            fclose(fileID);\n            %celldisp(C)\n            tmp_timeserver{j} = C{1};\n            tmp_tpt{j} = C{2};   %.*10;\n        end\n        if i==1\n            %Client\n            C = textscan(fileID,'%d %*s %*s %f %*s %d %*s %*s %*s %f %*s');\n            fclose(fileID);\n            %celldisp(C)\n\n            tmp_time{j} = C{1};\n            tmp_state{j} = C{2};\n            tmp_quality{j} = C{3};\n            tmp_buffer{j} = C{4};\n        end\n        \n    end\n    %    node = file_names{i}{1};\n    %client_path{j} = ['C:\\Users\\Steffen\\Desktop\\Messungen\\' clip '\\' mode '\\run ' num2str(j) '\\client.csv'];\n    %server_path{j} = ['C:\\Users\\Steffen\\Desktop\\Messungen\\' clip '\\' mode '\\run ' num2str(j) '\\server.csv'];\nend\n\nfor i=runs\n    cut{i}=0;\n    for j=1:length(tmp_state{i})\n    	if (tmp_state{i}(j) == 0) && (cut{i} == 0)\n           cut{i}=j; \n        end\n    end\nif cut{i}~=0\n    tmp_buffer{i}(cut{i}:end)=[];\n    tmp_quality{i}(cut{i}:end)=[];\n    tmp_time{i}(cut{i}:end)=[];\n    tmp_state{i}(cut{i}:end)=[];\n    \n    tmp_timeserver{i}(cut{i}:end)=[];\n    tmp_tpt{i}(cut{i}:end)=[];\nend\nend\n\n  %  files = dir(current_folder);\n\n  %  file_names = arrayfun(@(x) regexp(x.name,'_','split'),files,'UniformOutput',0);\n\n\n  %  nodes = cellfun(@(x) x{1},file_names,'UniformOutput',0);\n  \n%%Berechnungen\nfor j=runs\n    \n        % Stalling\n        %% In seconds\n        stallingSeconds{j}=0;\n        stallingTotal{j}=0;\n        for i=1:length(tmp_state{j})\n            if tmp_state{j}(i)== 3\n                stallingSeconds{j} =stallingSeconds{j} + 1;\n                if tmp_state{j}(i-1)~= 3\n                    stallingTotal{j} = stallingTotal{j} + 1;   \n                end    \n            end\n        end\n        \n\n    \n        % Mittelwert\n        mean_buffer{j}=mean(tmp_buffer{j});\n        mean_state{j}=mean(tmp_state{j});\n        mean_tpt{j}=mean(tmp_tpt{j});\n\n        % Varianz\n        var_buffer{j}=var(tmp_buffer{j});\n        var_state{j}=var(tmp_state{j});\n        var_tpt{j}=var(tmp_tpt{j});\n\n        % Standardabweichung\n        std_buffer{j}=std(tmp_buffer{j});\n        std_state{j}=std(tmp_state{j});\n        std_tpt{j}=std(tmp_tpt{j});\n        \n\n\nend\n\n        stallingSeconds\n        stallingTotal\n        \n\n\n%% Plot Buffer State Throughput\nfor j=runs\n    figure(j); clf; hold all; box on; \n    stairs(tmp_time{j}-tmp_time{j}(1), tmp_state{j}, 'DisplayName','Player State','LineWidth',3,'Color',[0.8471 0.1608 1]);\n    plot(tmp_time{j}-tmp_time{j}(1), tmp_buffer{j}, 'DisplayName','Buffer','LineWidth',2);\n    plot(tmp_timeserver{j}-tmp_timeserver{j}(1), tmp_tpt{j}, 'DisplayName','Throughput','LineWidth',2);\n\n    %%Plot Quality Change Line\n    %text([0], [55], ['Quality: ' num2str(tmp_quality{j}(10))]);\n    for k=2:length(tmp_quality{j}),\n        i=k-1;    \n        if tmp_quality{j}(i)~=tmp_quality{j}(k)\n            plot([i i], [0 60], 'LineWidth',2,'Color','red','LineStyle',':' );\n            text([i], [55], ['Quality: ' num2str(tmp_quality{j}(k))]);\n        end\n    end\n\n    %plot([200 200], [0 60]);\n    legend('Player State', 'Buffer', 'Throughput', 'Quality Changed')\n    title('Time vs Buffer/State/TPT');\n    % ylim([-10 60]);\n    % xlim([1 10]);\n       \n    %print('-djpeg',[num2str(j) 'BufferPsTpt.jpg']);\nend\n\n\n%% CDF tpt \nfor j=runs\n        [y,x]=ecdf(tmp_tpt{j});\n        figure(j); clf; hold all; box on;\n        stairs(x,y, 'DisplayName','Throughput')\n        %legend('show')\n        title('CDF Throughput in Mbps');       \n\n        print('-djpeg',[num2str(j) 'CDF Throughput.jpg']);\nend\n\n%% CDF Buffer \n% cdf_buffer=nan(1,sum(cell2mat(cellfun(@(x)size(x,1),tmp_buffer,'UniformOutput',false))));\n% i=1;\n% for j=runs\n%     cdf_buffer(i:i+length(tmp_buffer{j})-1)=tmp_buffer{j}';\n%     i=length(tmp_buffer{j})+i;\n% end\n\n% cell2mat(cellfun(@(x)(x'),tmp_buffer,'UniformOutput',false))\n\n%[y,x]=ecdf(cdf_buffer);\n\nfigure(1); clf; hold all; box on; \nqualities={'480' '720' '1080'};\nclips={'Waterworld' 'Bunny'};\nlocation='home';\n\nfor q=1:length(qualities)\nfor w=1:length(clips)\n    clip=clips{w};    \n    mode=qualities{q};\n    \n    loadData;\n    \n    [y,x]=ecdf(cell2mat(cellfun(@(x)(x'),tmp_buffer,'UniformOutput',false)));\n    stairs(x,y , 'DisplayName',['Buffer ' mode ' ' clip])\n    title('CDF Buffer in sec');       \n\n    \nend\nend\nlegend('show')\nprint('-djpeg',[num2str(length(runs)) ' CDF Buffer.jpg']);\n\n\n%% CDF State\nfor j=runs\n        [y,x]=ecdf(tmp_state{j});\n        figure(j); clf; hold all; box on;\n        stairs(x,y, 'DisplayName','Player State')\n        %legend('show')\n        title('CDF Player State');       \n\n        print('-djpeg',[num2str(j) 'CDF State.jpg']);\nend\n\n%% Konfidenz\n\nfigure(3); clf; hold all;\n\ntmp=[];\nfor i=runs\n    tmp=[tmp; mean(tmp_tpt{i})];\nend\n[M,C]=nanmeanconfint(tmp, 0.95, 1);\nerrorbar(M,C)\n%%ylim([150 220])\n\n%% Konfidenz Stalling Total Time\n\nfigure(2); clf; hold all; box on; \nqualities={'480' '720' '1080'};\nclips={'Waterworld' 'Bunny'};\nlocation='home';\nX=[1 2 3];\nset(gca,'XTickLabel',qualities); \nset(gca,'XTick',X); \nfor q=1:length(qualities)\n    tmp=[];\n    for w=1:length(clips)\n        clip=clips{w};    \n        mode=qualities{q};\n        loadData; \n        for i=runs\n            tmp=[tmp; mean(stallingSeconds{i})];\n        end\n    end\n    [M,C]=nanmeanconfint(tmp, 0.95, 1);\n    errorbar(X(q),M,C , 'DisplayName',[mode 'p']);\nend\nylabel('Seconds')\nxlabel('Quality')\ntitle('Konfidenz Stalling Total Time');\nlegend('show') \n%print('-djpeg',[num2str(length(runs)) ' Runs 1080p Konfidenz total Time Stalling.jpg']);\n%ylim([0 30])\n\n\n%% Konfidenz Stalling Total Number\n\nfigure(2); clf; hold all; box on; \nqualities={'480' '720' '1080'};\nclips={'Waterworld' 'Bunny'};\nlocation='home';\nX=[1 2 3];\nset(gca,'XTickLabel',qualities); \nset(gca,'XTick',X); \nfor q=1:length(qualities)\n    tmp=[];\n    for w=1:length(clips)\n        clip=clips{w};    \n        mode=qualities{q};\n        loadData; \n        for i=runs\n            tmp=[tmp; mean(stallingTotal{i})];\n        end\n    end\n    [M,C]=nanmeanconfint(tmp, 0.95, 1);\n    errorbar(X(q),M,C , 'DisplayName',['Konfidenz ' mode ' ' clip])\nend\nylabel('Stallings')\nxlabel('Quality')\ntitle('Konfidenz Stalling Total Number');\nlegend('show') \n%print('-djpeg',[num2str(length(runs)) ' Runs 1080p Konfidenz total number Stalling.jpg']);\n%ylim([0 30])\n\n%%\nmin_dim=inf;\nfor i=runs\n    min_dim = min(min_dim,size(tmp_tpt{i},1));\nend\nfor i=runs\n    tmp_tpt{i}(min_dim+1:end)=[];\nend\n\n%% QoE\nres=[]\nfor L=1:4\n    for N=1:11\n        f = 3.5*exp(-(0.15*L+0.19)*(N-1))+1.5;\n        res(N,L)=f;\n    end\nend\n\n\nfigure(60); clf;\nplot(1:11,res);ylim([1 5]); set(gca,'XTickLabel',0:10);\n\n%% Read Files\n%%read server data\nfor j=runs\n    fileID = fopen(server_path{j});\n    C = textscan(fileID,'%*s %d %*s %*s %*s %*s %*s %f %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s');\n    fclose(fileID);\n    %celldisp(C)\n    tmp_timeserver{j} = C{1};\n    tmp_tpt{j} = C{2};   %.*10;\n\n    %%read client data\n\n    fileID = fopen(client_path{j});\n    C = textscan(fileID,'%d %*s %*s %f %*s %d %*s %*s %*s %f %*s');\n    fclose(fileID);\n    %celldisp(C)\n\n    tmp_time{j} = C{1};\n    tmp_state{j} = C{2};\n    tmp_quality{j} = C{3};\n    tmp_buffer{j} = C{4};\nend\n\n\n%% Konfidenz Stalling Total Time\n\nfigure(1); clf; hold all; box on;\nqualities={'720' '1080'};\nclips={'Waterworld' 'Bunny'};\nlocation='home';\nX=1;\nfor q=1:length(qualities)\nfor w=1:length(clips)\n    clip=clips{w};    \n    mode=qualities{q};\n    \n    loadData; \n    \ntmp=[];\nfor i=runs\n    tmp=[tmp; mean(stallingSeconds{i})];\nend\n[M,C]=nanmeanconfint(tmp, 0.95, 1);\nerrorbar(X,M,C , 'DisplayName',['Konfidenz ' mode ' ' clip])\nX=X+1;\nend\nend\n\ntitle('Konfidenz Stalling in Seconds');\nlegend('show')   \n\n%print('-djpeg',[num2str(length(runs)) ' Runs ' mode 'p Konfidenz total time Stalling.jpg']);\n%ylim([0 210])",
+			"file": "/C/Users/Korn/AppData/Local/Temp/7zO24A2.tmp/run.m",
+			"file_size": 8901,
+			"file_write_time": 130237261970000000,
+			"settings":
+			{
+				"buffer_size": 8557,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "%% CDF State \nfigure(1); clf; hold all; box on; \ncols=copper(length(qualities));\nfor q=1:length(qualities)\n    tmp=[];\n    icount=1;\n    for w=1:length(clips)\n      clip=clips{w};    \n      mode=qualities{q};\n    \n      loadData;\n      for j=runs\n          tmp(icount:icount+length(tmp_state{j})-1)=tmp_state{j}';\n          icount=length(tmp_state{j})+icount;\n      end\n        \n    end\n    [y,x]=ecdf(tmp);\n    stairs(x,y , 'DisplayName',[mode],'Color',cols(length(qualities)+1-q,:))    \nend\n%title('Player State relative to total testing Duration');\n%legend('show')\nset(gca,'XTickLabel',{'Playing' 'Paused' 'Buffering'});\nset(gca,'XTick',[1 2 3]);\nxlim([0 4])\n%print('-djpeg',[num2str(length(runs)) ' CDF State.jpg']);\nylabel('P(X \\leq x)')\n\n\nif strcmpi(offloadalgo,'noOffload')== 1\n    \nend\nif strcmpi(offloadalgo,'Offloadreqtpt')== 1\n    \nend\nif strcmpi(offloadalgo,'Offloadreqtptplusdl')== 1\n    \nend\n\nhandle = figure(1);\nsave2Files2([0 0 1], plot_path, ['CDFState-' offloadalgo], handle, 2);\n%print('-djpeg',[plot_path 'CDFState-' offloadalgo]);",
+			"file": "/C/Users/Korn/AppData/Local/Temp/7zOA052.tmp/cdf_state.m",
+			"file_size": 1092,
+			"file_write_time": 130307226500000000,
+			"settings":
+			{
+				"buffer_size": 1051,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Korn/AppData/Roaming/Sublime Text 3/Packages/User/Octave.sublime-build",
+			"settings":
+			{
+				"buffer_size": 36,
+				"line_ending": "Windows",
+				"name": "untitled.sublime-build"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 127.0,
+		"last_filter": "insta",
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"list ",
+				"Package Control: List Packages"
+			],
+			[
+				"ja",
+				"Javascript Beautify"
+			],
+			[
+				"java",
+				"Javascript Beautify"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"lore",
+				"LoremIpsum: (200) stick shake"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/E/Git/gallery/Matlab"
+	],
+	"file_history":
+	[
+		"/C/Users/Korn/Desktop/finance.txt",
+		"/C/Users/Korn/Desktop/Neues Textdokument.txt",
+		"/E/Git/gallery/Matlab/test1.pdf",
+		"/E/Git/gallery/Matlab/test1.jpg",
+		"/E/Git/gallery/Matlab/eval.sublime-project",
+		"/E/Git/gallery/eval.m",
+		"/C/Users/Korn/AppData/Local/Temp/7zOA989.tmp/Aufgeräumt.m",
+		"/E/Git/gallery/serverlist",
+		"/E/Git/gallery/phantomtest.js",
+		"/C/Users/Korn/Downloads/Telegram Desktop/matrix.txt",
+		"/D/Dropbox/JackpotNinja/matrix.txt",
+		"/D/Dropbox/Public/config.json",
+		"/E/Git/gallery/public/scripts/logging.js",
+		"/E/Git/gallery/app.js",
+		"/C/Users/Korn/Desktop/marcelphantom/package.json",
+		"/C/Users/Korn/Desktop/marcelphantom/phantomtest.js",
+		"/C/Users/Korn/Desktop/marcelphantom/crawled.txt",
+		"/C/Users/Korn/Desktop/marcelphantom/SteamCrawler.txt",
+		"/C/Users/Korn/Desktop/marcelphantom/app.js",
+		"/C/Users/Korn/Desktop/marcelphantom/output.txt",
+		"/C/Users/Korn/Desktop/marcelphantom/test2.js",
+		"/E/Git/gallery/.gitignore",
+		"/C/Users/Korn/AppData/Local/Temp/7zOBB04.tmp/README.md",
+		"/E/Git/gallery/public/scripts/qualitySelection.js",
+		"/E/Git/gallery/public/scripts/serverSelection.js",
+		"/E/Git/gallery/casper.js",
+		"/E/Git/gallery/views/index.jade",
+		"/E/Git/gallery/public/stylesheets/style.css",
+		"/E/Git/gallery/public/stylesheets/style.styl",
+		"/E/Git/gallery/public/scripts/Promise.js",
+		"/E/Git/gallery/package.json",
+		"/E/Git/gallery/example_fin.png",
+		"/C/Users/Korn/Desktop/Neues Textdokument (2).txt",
+		"/D/Dropbox/JackpotNinja/node-homepage/game.js",
+		"/E/Git/gallery/log/server_14_9_Time_15_22_log.csv",
+		"/E/Git/gallery/log/read.txt",
+		"/C/Users/Korn/Desktop/autoit.au3",
+		"/C/Users/Korn/Desktop/Geldwäsche/start.sh",
+		"/E/Git/gallery/views/layout.jade",
+		"/D/Dropbox/holy-gaben/login.txt",
+		"/D/Steam/SteamApps/common/Counter-Strike Global Offensive/csgo/cfg/autoexec.cfg",
+		"/C/Users/Korn/Desktop/Geldwäsche/config.json",
+		"/D/Dropbox/holy-gaben/items.txt",
+		"/C/Users/Korn/Desktop/Geldwäsche/login.txt",
+		"/C/Users/Korn/Desktop/Disabled Services.txt",
+		"/C/Users/Korn/Desktop/Geldwäsche/log.txt",
+		"/C/Users/Korn/AppData/Local/Temp/7zO281C.tmp/config.json",
+		"/C/Users/Korn/Desktop/Neues Textdokument (3).txt",
+		"/C/Users/Korn/Desktop/ts privkey.txt",
+		"/C/Users/Korn/Desktop/tsadmin.txt",
+		"/C/Users/Korn/Desktop/osmc dmesg.txt",
+		"/C/Users/Korn/Desktop/FAQ.txt",
+		"/F/Betriebssysteme/produktkeys windoof.txt",
+		"/C/Users/Korn/Desktop/Fragen für Lugrin.txt",
+		"/D/Dropbox/JackpotNinja/node-homepage/app.js",
+		"/C/Users/Korn/Desktop/Gymnasium Neutraubling.txt",
+		"/E/Git/Praktikum/TODO.md",
+		"/C/Users/Korn/Desktop/holy-gaben/login.txt",
+		"/C/Users/Korn/Desktop/Neues Textdokument (4).txt",
+		"/E/UnityProjects/cardboard-controls-master/cardboard-controls-master/README.md",
+		"/E/UnityProjects/cardboard-controls-master/cardboard-controls-master/CardboardControl/DemoScene/README.md",
+		"/C/Users/Korn/Desktop/holy-gaben/sentry_korndaweizen.bin",
+		"/D/Steam/ssfn1976235811588839826",
+		"/C/Users/Korn/Desktop/holy-gaben/items.txt",
+		"/D/Dropbox/Unsorted/CS/Buyscript/config.cfg",
+		"/D/Dropbox/keys/key.pub",
+		"/D/Dropbox/JackpotNinja/node-homepage/views/play.jade",
+		"/C/Users/Korn/Desktop/ts3server_minimal_runscript.sh",
+		"/D/Dropbox/keys/authorized_keys",
+		"/C/Users/Korn/Desktop/holy-gaben/c2.txt",
+		"/C/Users/Korn/Desktop/holy_gaben2/login.txt",
+		"/D/Dropbox/JackpotNinja/holy-gaben/condition-exploit.txt",
+		"/C/Program Files (x86)/ImageWriter/README.txt",
+		"/C/Users/Korn/Desktop/holy-gaben-super-geil/items.txt",
+		"/C/Users/Korn/Desktop/login.txt",
+		"/C/Users/Korn/Desktop/caserecycling/views/layout.jade",
+		"/C/Users/Korn/Desktop/caserecycling/public/stylesheets/style.styl",
+		"/C/Users/Korn/Desktop/caserecycling/app.js",
+		"/C/Users/Korn/Desktop/caserecycling/Procfile",
+		"/C/Users/Korn/Desktop/holy-gaben/sentry.bin",
+		"/C/Users/Korn/Desktop/caserecycling/views/index.jade",
+		"/C/Users/Korn/AppData/Roaming/Sublime Text 3/Packages/User/Jade.sublime-settings",
+		"/D/Dropbox/Uni/Master/Praktikum/Photoalbum.txt",
+		"/C/Users/Korn/Desktop/tst/Main Account.txt",
+		"/C/Users/Korn/Desktop/tst/normal.txt",
+		"/C/Users/Korn/Desktop/tst/normal - Kopie.txt",
+		"/C/Users/Korn/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Korn/Desktop/caserecycling/index.js",
+		"/C/Users/Korn/Desktop/ChestPage/node-homepage/views/layout.jade",
+		"/C/Users/Korn/Desktop/nodetut/app.js",
+		"/C/Users/Korn/Desktop/ChestPage/node-homepage/views/play.jade",
+		"/C/Users/Korn/Desktop/ChestPage/node-homepage/app.js",
+		"/C/Users/Korn/Desktop/ChestPage/node-homepage/game.js",
+		"/C/Users/Korn/Desktop/nodetut/views/index.jade",
+		"/C/Users/Korn/Desktop/nodetut/views/about.jade",
+		"/C/Users/Korn/Desktop/nodetut/views/contact.jade",
+		"/C/Users/Korn/Desktop/nodetut/views/layout.jade",
+		"/C/Users/Korn/Desktop/nodetut/public/stylesheets/style.styl",
+		"/C/Users/Korn/Desktop/tst/node-js-getting-started/index.js",
+		"/C/Users/Korn/Desktop/tst/node-js-getting-started/Procfile",
+		"/C/Users/Korn/Desktop/tst/node-js-getting-started/app.json",
+		"/C/Users/Korn/Desktop/nodetut/package.json",
+		"/D/Dropbox/JackpotNinja/Caserecycler/app.js",
+		"/C/Users/Korn/Desktop/nodetut/node_modules/passport-steam/lib/passport-steam/strategy.js",
+		"/C/Users/Korn/Desktop/ChestPage/node-homepage/package.json",
+		"/C/Users/Korn/Desktop/ChestPage/node-homepage/public/stylesheets/ninja.styl",
+		"/C/Users/Korn/Desktop/ChestPage/node-homepage/public/stylesheets/style.styl",
+		"/C/Users/Korn/Desktop/nodetut/node_modules/public/stylesheets/style.styl",
+		"/C/Users/Korn/Desktop/nodetut/node_modules/app.js",
+		"/D/Dropbox/JackpotNinja/node-homepage/views/layout.jade",
+		"/D/Dropbox/JackpotNinja/node-homepage/public/stylesheets/ninja.styl",
+		"/D/Dropbox/JackpotNinja/node-homepage/public/stylesheets/style.css",
+		"/D/Dropbox/JackpotNinja/node-homepage/views/index.jade",
+		"/C/Users/Korn/Desktop/assignment_4.m",
+		"/D/Dropbox/Uni/Master/Database.java",
+		"/D/Steam/SteamApps/common/Counter-Strike Global Offensive/csgo/cfg/config.cfg",
+		"/D/Dropbox/Magic/karador.txt",
+		"/C/Users/Korn/Desktop/demo.m",
+		"/D/Dropbox/JackpotNinja/Fragen an Rechtsmensch.txt",
+		"/C/Program Files/CPUID/CPU-Z/cpuz_readme.txt",
+		"/C/Users/Korn/Desktop/danke111.txt",
+		"/C/Users/Korn/Desktop/LUTSCHON.txt",
+		"/C/Users/Korn/AppData/Local/Temp/7zO2AE7.tmp/calibration.txt",
+		"/C/Users/Korn/AppData/Local/Temp/7zO4F98.tmp/calibration.yml",
+		"/D/Dropbox/Uni/Master/Einführung Mensch Computer Systeme/Report/myfiles/searchalumni.tex",
+		"/D/Dropbox/Uni/Master/Einführung Mensch Computer Systeme/Report/myfiles/managebuddy.tex",
+		"/D/Dropbox/Uni/Master/Realtime Interactive Systems/Übung/01-x3d/ThreeBoxesAboveAPlane.x3d",
+		"/D/Dropbox/Uni/Master/Realtime Interactive Systems/Übung/01-x3d/bullshit.x3d"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"lab",
+			" 35",
+			"170",
+			"    {\n      \"itemhash\": \"Desert Eagle | Naga (Minimal Wear)\",\n      \"condition\": 0.0935,\n      \"price\": 40\n    },",
+			"    {\n      \"itemhash\": \"Desert Eagle | Naga (Minimal Wear)\",\n      \"condition\": 0.0935,\n      \"price\": 40\n    },\n    {\n      \"itemhash\": \"MAC-10 | Malachite (Minimal Wear)\",\n      \"condition\": 0.0935,\n      \"price\": 40\n    },\n    {\n      \"itemhash\": \"Sawed-Off | Serenity (Minimal Wear)\",\n      \"condition\": 0.0935,\n      \"price\": 40\n    }",
+			"waitForTestRowFinished",
+			"ceat",
+			"dostuff",
+			"™ ",
+			"http://steamcommunity.com/market/listings/730/",
+			"butt",
+			"change",
+			"ser",
+			"$ser",
+			"changeSer",
+			"chang",
+			"changeS",
+			"$",
+			"(sendQualityLog(.*))\\);",
+			"(sendQualityLog(.*));",
+			"sendQualityLog(.*);",
+			"sendQualityLog(.*));",
+			"sendLog",
+			"g_bPaused",
+			"Next",
+			"right",
+			"left",
+			"sm",
+			"getItemValue",
+			"checkTradeOffers",
+			"userNeedsToPlaceBet",
+			"needsBet",
+			"newTradeOfferReceived",
+			"addReceivedTradeOffer",
+			"newTradeOfferReceived",
+			"setUs",
+			"setUserBet",
+			"getItemValue",
+			"sens",
+			"login",
+			"ensure",
+			"60px",
+			"value",
+			"0",
+			"vesthelm/vest",
+			"vesthelm"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			" 40",
+			"180",
+			"waitForReadyForTesting",
+			"itemCount",
+			"%E2%84%A2%20",
+			"",
+			"this.",
+			"$1 + \" ServerIP \" + $server);",
+			"$1 + \" ServerIP \" + $server",
+			"$1 + \" ServerIP \" + $server);",
+			"sendServerLog",
+			"sendQualityLog",
+			"Next",
+			"Previous",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "eval.m",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1994,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1990,
+								1990
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Objective-C/Objective-C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/Korn/Desktop/Algorithms_Relevant_Data.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2293,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								646,
+								646
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "save2Files2.m",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1057,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								26,
+								26
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Objective-C/Objective-C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/Users/Korn/AppData/Local/Temp/7zO24A2.tmp/run.m",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8557,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								944,
+								944
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Matlab/Matlab.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1547.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/Users/Korn/AppData/Local/Temp/7zOA052.tmp/cdf_state.m",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1051,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								997,
+								907
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Objective-C/Objective-C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": -0.0,
+						"translation.y": 360.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/Users/Korn/AppData/Roaming/Sublime Text 3/Packages/User/Octave.sublime-build",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 36,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								35,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 258.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/User/Octave.sublime-build",
+	"project": "eval.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 219.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
