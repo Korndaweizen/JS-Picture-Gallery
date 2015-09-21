@@ -5,7 +5,7 @@ block content
   script(type='text/javascript' src="scripts/qualitySelection.js")
   script(type='text/javascript' src="scripts/logging.js")
   script(type='text/javascript').
-    var tests = ['radio_ownsrcset', 'radio_qtpt', 'radio_qtptotf', 'radio_uncompressed', 'radio_large', 'radio_medium', 'radio_small'];
+    var tests = ['radio_ownsrcset', 'radio_qtpt', 'radio_qtptotf', 'radio_uncompressed', 'radio_xlarge','radio_large', 'radio_medium', 'radio_small'];
     var testCount = 0;
     $readyForTesting=false;
 
@@ -131,6 +131,9 @@ block sidebar
       br
       input(type='radio', name='qualityAlgo', value='radio_uncompressed', id='radio_uncompressed')
       label(for='radio_uncompressed')   Uncompressed
+      br
+      input(type='radio', name='qualityAlgo', value='radio_xlarge', id='radio_xlarge')
+      label(for='radio_xlarge')  X-Large
       br
       input(type='radio', name='qualityAlgo', value='radio_large', id='radio_large')
       label(for='radio_large')  Large

@@ -12,6 +12,8 @@ function changeQualityMode(){
     if($("#radio_uncompressed").is(":checked"))
       $qualityMode="Quality_Manual";  
     if($("#radio_large").is(":checked"))
+      $qualityMode="Quality_Manual";
+    if($("#radio_xlarge").is(":checked"))
       $qualityMode="Quality_Manual"; 
     if($("#radio_medium").is(":checked"))
       $qualityMode="Quality_Manual"; 
@@ -33,6 +35,8 @@ function setQuality() {
 
     if($("#radio_uncompressed").is(":checked"))
       $quality="uncompressed";    
+    if($("#radio_xlarge").is(":checked"))
+      $quality="xlarge";
     if($("#radio_large").is(":checked"))
       $quality="large";
     if($("#radio_medium").is(":checked"))
@@ -47,11 +51,13 @@ function setQuality() {
 function setQualityByScreenSize() {
     console.log("screen.Width: "+screen.width);
     $quality="uncompressed";
-    if (viewportWidth< 1536)
+    if (viewportWidth<= 2048)
+      $quality="xlarge";
+    if (viewportWidth<= 1024)
       $quality="large";
-    if (viewportWidth< 640)
+    if (viewportWidth<= 640)
       $quality="medium";
-    if (viewportWidth< 320)
+    if (viewportWidth<= 320)
       $quality="small";
     sendQualityLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " Width " + viewportWidth + " Height "+ viewportHeight + " ServerIP " + $server);  
 };
@@ -109,9 +115,11 @@ function getTptOTF(imgUrl,imgNo) {
 
 function setQualityByTpt(throughput){
   var quality=$quality;
-  if(throughput>=3000)
+  //if(throughput!=3000)
     $quality="uncompressed";
-  if(throughput<3000)
+  if(throughput<1500)
+    $quality="xlarge";
+  if(throughput<500)
     $quality="large";
   if(throughput<300)
     $quality="medium";
