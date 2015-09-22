@@ -19,7 +19,7 @@ function changeQualityMode(){
       $qualityMode="Quality_Manual"; 
     if($("#radio_small").is(":checked"))
       $qualityMode="Quality_Manual"; 
-    sendQualityLog("Changed_Quality_Mode "+$qualityMode + " ServerIP " + $server);
+    sendLog("Changed_Quality_Mode "+$qualityMode + " ServerIP " + $server);
     setQuality();
 };
 
@@ -44,7 +44,7 @@ function setQuality() {
     if($("#radio_small").is(":checked"))
       $quality="small";
     if($qualityMode=="Quality_Manual"){
-      sendQualityLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " ServerIP " + $server);
+      sendLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " ServerIP " + $server);
     }
 };
 
@@ -59,7 +59,7 @@ function setQualityByScreenSize() {
       $quality="medium";
     if (viewportWidth<= 320)
       $quality="small";
-    sendQualityLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " Width " + viewportWidth + " Height "+ viewportHeight + " ServerIP " + $server);  
+    sendLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " Width " + viewportWidth + " Height "+ viewportHeight + " ServerIP " + $server);  
 };
 
 function getTptBackground() {
@@ -126,7 +126,7 @@ function setQualityByTpt(throughput){
   if(throughput<100)
     $quality="small";
   if (quality != $quality)
-    sendQualityLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " Throughput_In_KB_s " + throughput + " ServerIP " + $server);
+    sendLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " Throughput_In_KB_s " + throughput + " ServerIP " + $server);
   if (quality == $quality)
-    sendQualityLog("Quality_did_not_change "+$quality+ " Mode "+$qualityMode + " Throughput_In_KB_s " + throughput + " ServerIP " + $server);
+    sendLog("Quality_did_not_change "+$quality+ " Mode "+$qualityMode + " Throughput_In_KB_s " + throughput + " ServerIP " + $server);
 };
