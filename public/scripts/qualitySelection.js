@@ -1,5 +1,8 @@
 $quality="medium";
 $qualityMode="";
+$qualityTimer=null;
+$qualityTimerInterval=30; //Seconds
+$backgroudDLrunning=false;
 
 function changeQualityMode(){
     console.log("Quality Settings are being changed:")
@@ -24,11 +27,14 @@ function changeQualityMode(){
 };
 
 function setQuality() {
+    clearInterval($qualityTimer);
     console.log("Quality Settings are being changed:")
     if($qualityMode=="Quality_Screensize")
       setQualityByScreenSize();
-    if($qualityMode=="Quality_Throughput")
-      getTptBackground(); 
+    if($qualityMode=="Quality_Throughput"){
+      getTptBackground();
+      $qualityTimer = setInterval(getTptBackground, $qualityTimerInterval*1000);
+    }
 
     //if($qualityMode=="Quality_Throughput_OTF")
     //  getTptOTF();   
@@ -63,12 +69,20 @@ function setQualityByScreenSize() {
 };
 
 function getTptBackground() {
+  console.log("getTptBackground");
+  if($pictureDLrunning==false && $backgroudDLrunning==false ){
+    $backgroudDLrunning=true;
     getTpt($server+"images/1mb.jpg", 1018).then(function(speed) {
       var throughput = speed[1].toFixed(2);
-      setQualityByTpt(throughput);
+      if($pictureDLrunning==false){
+        setQualityByTpt(throughput);
+      }
+      $backgroudDLrunning=false;
     }).catch(function(error) {
       console.log("getTpt Error: "+String(error));
+      $backgroudDLrunning=false;
     });
+  }
 };
 
 /**

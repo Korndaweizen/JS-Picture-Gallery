@@ -14,6 +14,7 @@ block content
     processImg(spinner);
 
     $isDrawed=-1;  
+    $pictureDLrunning=false;
 
     $('html').click(function() {
       $isDrawed=-1;
@@ -43,6 +44,7 @@ block content
       if($isDrawed>=1){
         return
       }
+      $pictureDLrunning=true;
       imageContainer = document.createElement("div");
       imageContainer.style.position = "absolute";
       imageContainer.style.textAlign = "center";
@@ -84,6 +86,7 @@ block content
 
       document.body.appendChild(imageContainer);
       $isDrawed=imgNo;
+      $pictureDLrunning=false;
     }
 
     $('body').on('change', 'input[name=serverAlgo]:radio', changeServerMode);

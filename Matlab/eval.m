@@ -10,9 +10,9 @@ plot_path='E:\Git\gallery\log';
 
 screen_sizes = [320 640 1024 2048 4096]
 
-algorithms= {'\tptOTF' '\tptOnStart' '\ownSrcSet' '\allgemein'}
+algorithms= {'\tptOTF' '\tptBackground' '\ownSrcSet' '\allgemein'}
 
-algorithm=algorithms{3}
+algorithm=algorithms{1}
 
 runs=[1];
 for j=runs
@@ -25,7 +25,8 @@ for j=runs
     for i=1:number_of_files
             current_file = fullfile([plot_path algorithm],dirListing(i).name)
 
-            filename= new_claim = strrep(dirListing(i).name, '.csv', '')
+            filename=strrep(dirListing(i).name, '.csv', '')
+            filename=strrep(filename, 'mbit', '')
 
             fileID = fopen(current_file)
             %Client
@@ -62,27 +63,16 @@ for j=runs
                         qualityArray{j}(g)=6;
                     end
                 end 
-                class('1024')
-                str2double('1024')
+
                 if(strcmp(algorithm,'\ownSrcSet'))
                     screensize{j}(g)=str2double(filename);
+                end 
+                if(strcmp(algorithm,'\tptBackground') || strcmp(algorithm,'\tptOTF'))
+                    maxDLink{j}(g)=str2double(filename)
                 end                                                    
             end
-            
 
-            %figure(1); clf; hold all; box on; 
-            %X=[1 2 3 4 5 6 7 8 9 10] 
-            %scatter (picNo{1}, tptKBs{1}, 'r');
-            %set(gca,'XTick',X);
-            %ylim([0 260]);
-            %xlim([0 11]);
-            %ylabel('Average Throughput in KB/s');
-            %xlabel('Picture');           
-            %title ('Picture Number vs Throughput');
-            %print ("test1.pdf"); 
-            %set (gcf, "papersize", [6.4, 4.8]); 
-            %set (gcf, "paperposition", [0, 0, 6.4, 4.8]); 
-            %print ("test111.pdf")
+            qualityArray{j}
 
             set (gcf, "papersize", [6.4, 4.8]); 
             set (gcf, "paperposition", [0, 0, 6.4, 4.8]);
@@ -103,10 +93,27 @@ for j=runs
                 xlabel('Screen Width');
                 ylabel('Selected Qualities');           
                 title ('Screen Resolution vs Selected Qualities');
-                %print ("test22.jpg");
-                %print('-djpeg','CDF Throughput.jpg'); 
                 %handle = figure(2);
                 %save2Files2([0 1 1], [plot_path '\\'], 'Allgemein', handle, 2);
+            end
+
+            if(strcmp(algorithm,'\tptBackground') || strcmp(algorithm,'\tptOTF'))
+                %Max downlink speed vs Bildauflösung
+                figure(2); hold all; box on; 
+                Y=[1 2 3 4 5];
+                X=[0.5 2 3 8 12];
+                scatter (maxDLink{j}, qualityArray{j}, 'r');
+                set(gca,'XTick',X);
+                set(gca,'YTick',Y);
+                %set(gca,'xscale','log')
+                set(gca,'YTickLabel',{'Small' 'Medium' 'Large' 'X-Large' 'Original'}); ;
+                set(gca,'XTickLabel',X);
+                xlim([0 12.5]);
+                ylim([0.5 5.5]);
+                xlabel('Max Download Speed in Mbit');
+                ylabel('Selected Qualities');           
+                title ('Max Download Speed vs Selected Qualities');
+
             end
 
             if(strcmp(algorithm,'\allgemein'))
@@ -123,7 +130,6 @@ for j=runs
                 ylabel('Picture Size in KB');
                 xlabel('Quality Modes');           
                 title ('Quality Modes vs Picture Size in KB');
-                %print ("test22.jpg");
                 print('-djpeg','Allgemein.jpg'); 
                 handle = figure(2);
                 save2Files2([0 1 1], [plot_path '\\'], 'Allgemein', handle, 2);
@@ -133,7 +139,7 @@ for j=runs
     end
 end
 
-if(strcmp(algorithm,'\ownSrcSet'))
+if(~(strcmp(algorithm,'\allgemein')))
     handle = figure(2);
-    save2Files2([0 1 1], [plot_path '\\'], 'ownscrset', handle, 2);
+    save2Files2([0 1 1], [plot_path '\\'], strrep(algorithm, '\\', ''), handle, 2);
 end
