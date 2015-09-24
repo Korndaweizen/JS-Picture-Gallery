@@ -3,6 +3,7 @@ $qualityMode="";
 $qualityTimer=null;
 $qualityTimerInterval=30; //Seconds
 $backgroudDLrunning=false;
+$inbetweenPicDL=false;
 
 function changeQualityMode(){
     console.log("Quality Settings are being changed:")
@@ -71,10 +72,11 @@ function setQualityByScreenSize() {
 function getTptBackground() {
   console.log("getTptBackground");
   if($pictureDLrunning==false && $backgroudDLrunning==false ){
+    $inbetweenPicDL=false;
     $backgroudDLrunning=true;
     getTpt($server+"images/1mb.jpg", 1018).then(function(speed) {
       var throughput = speed[1].toFixed(2);
-      if($pictureDLrunning==false){
+      if($inbetweenPicDL==false ){
         setQualityByTpt(throughput);
       }
       $backgroudDLrunning=false;

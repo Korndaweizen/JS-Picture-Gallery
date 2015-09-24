@@ -46,7 +46,7 @@ function waitFor(testFx, onReady, timeOutMillis) {
 };
 
 function waitForPictureVisible(onReady, timeOutMillis) {
-    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 15000; //< Default Max Timout is 15s  
+    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 60000; //< Default Max Timout is 60s  
 
     // Wait for 'centered picture' to be visible
     waitFor(function() {
@@ -126,7 +126,7 @@ function runTestSet(numberOfTestPictures, numberOfTestRuns) {
         });
         console.log("Starting Test Row");
         page.evaluate(function() {
-            var algorithm='radio_ownsrcset';
+            var algorithm='radio_qtptotf';
         	  //var tests = ['radio_ownsrcset', 'radio_qtpt', 'radio_qtptotf', 'radio_uncompressed', 'radio_large', 'radio_medium', 'radio_small'];
         	  //var count =0;
             $("#"+algorithm).click();
@@ -137,7 +137,7 @@ function runTestSet(numberOfTestPictures, numberOfTestRuns) {
 }
 
 var page = require('webpage').create();
-page.viewportSize = { width: 4096, height: 768 };
+page.viewportSize = { width: 1024, height: 768 };
 //page.includeJs("https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js", function() {
   page.open('http://localhost:21210/', function(status) {
     console.log("Status: " + status);
