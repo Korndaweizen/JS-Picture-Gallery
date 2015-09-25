@@ -126,7 +126,7 @@ function runTestSet(numberOfTestPictures, numberOfTestRuns) {
         });
         console.log("Starting Test Row");
         page.evaluate(function() {
-            var algorithm='radio_qtptotf';
+            var algorithm='radio_qtpt';
         	  //var tests = ['radio_ownsrcset', 'radio_qtpt', 'radio_qtptotf', 'radio_uncompressed', 'radio_large', 'radio_medium', 'radio_small'];
         	  //var count =0;
             $("#"+algorithm).click();
