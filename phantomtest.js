@@ -96,7 +96,7 @@ function waitForTestingRecursive(counter) {
         //page.evaluate(function() {
         //    newLog();
         //});
-        justWait(10000, function(){
+        justWait(30000, function(){
         	runTestRow(numberOfTestPictures);
         	waitForReadyForTesting( function() {
                   waitForTestingRecursive(counter-1);
@@ -126,7 +126,7 @@ function runTestSet(numberOfTestPictures, numberOfTestRuns) {
         });
         console.log("Starting Test Row");
         page.evaluate(function() {
-            var algorithm='radio_qtpt';
+            var algorithm='radio_qtptotf';
         	  //var tests = ['radio_ownsrcset', 'radio_qtpt', 'radio_qtptotf', 'radio_uncompressed', 'radio_large', 'radio_medium', 'radio_small'];
         	  //var count =0;
             $("#"+algorithm).click();
