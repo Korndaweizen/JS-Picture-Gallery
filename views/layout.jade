@@ -19,6 +19,8 @@ html
       $(window).on('resize orientationChange', function(event) {
         viewportWidth = $(window).width();
         viewportHeight = $(window).height();
+        if($qualityMode=="Quality_Screensize")
+          setQualityByScreenSize();
         console.log( "Width: "+ viewportWidth + ", Height: " + viewportHeight );
       });
 

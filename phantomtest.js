@@ -64,6 +64,10 @@ function waitForPictureRecursive(counter) {
       page.evaluate(function() {
           $(".imgButton_Next").click();
       });
+
+      //widthvar=widthvar+50;
+      //page.viewportSize = { width: widthvar, height: 768 };
+
       waitForPictureVisible( function() {
           waitForPictureRecursive(counter-1);
       });
@@ -126,7 +130,7 @@ function runTestSet(numberOfTestPictures, numberOfTestRuns) {
         });
         console.log("Starting Test Row");
         page.evaluate(function() {
-            var algorithm='radio_qtptotf';
+            var algorithm='radio_ownsrcset';
         	  //var tests = ['radio_ownsrcset', 'radio_qtpt', 'radio_qtptotf', 'radio_uncompressed', 'radio_large', 'radio_medium', 'radio_small'];
         	  //var count =0;
             $("#"+algorithm).click();
@@ -136,8 +140,9 @@ function runTestSet(numberOfTestPictures, numberOfTestRuns) {
     });
 }
 
+var widthvar=1024;
 var page = require('webpage').create();
-page.viewportSize = { width: 1024, height: 768 };
+page.viewportSize = { width: widthvar, height: 768 };
 //page.includeJs("https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js", function() {
   page.open('http://localhost:21210/', function(status) {
     console.log("Status: " + status);

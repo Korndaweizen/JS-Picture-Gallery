@@ -10,9 +10,9 @@ plot_path='E:\Git\gallery\log';
 
 screen_sizes = [320 640 1024 2048 4096]
 
-algorithms= {'\tptOTF' '\tptBackground' '\ownSrcSet' '\allgemein'}
+algorithms= {'\tptOTF' '\tptBackground' '\ownSrcSet' '\allgemein' '\ownSrcSetvalidate'}
 
-algorithm=algorithms{2}
+algorithm=algorithms{5}
 
 runs=[1];
 for j=runs
@@ -64,7 +64,7 @@ for j=runs
                     end
                 end 
 
-                if(strcmp(algorithm,'\ownSrcSet'))
+                if(strcmp(algorithm,'\ownSrcSet') || strcmp(algorithm,'\ownSrcSetvalidate'))
                     screensize{j}(g)=str2double(filename);
                 end 
                 if(strcmp(algorithm,'\tptBackground') || strcmp(algorithm,'\tptOTF'))
@@ -72,7 +72,12 @@ for j=runs
                 end                                                    
             end
 
-            qualityArray{j}
+            if(strcmp(algorithm,'\tptOTF'))
+                for g=1:(size(tptKBs{j})-1)
+                    tptKBsShift{j}(g)=tptKBs{j}(g);
+                    qualityArrayShift{j}(g)=qualityArray{j}(g+1);
+                end
+            end
 
             set (gcf, "papersize", [6.4, 4.8]); 
             set (gcf, "paperposition", [0, 0, 6.4, 4.8]);
@@ -97,6 +102,32 @@ for j=runs
                 %save2Files2([0 1 1], [plot_path '\\'], 'Allgemein', handle, 2);
             end
 
+            if(strcmp(algorithm,'\ownSrcSetvalidate'))
+                %Quality Modes vs Picture Size in KB
+                figure(2); hold all; box on; 
+                Y=[1 2 3 4 5];
+                X=[320 640 1024 2064 4096];
+                scatter(picNo{j}, qualityArray{j}, 'r', 'x');
+                set(gca,'XTick',X);
+                set(gca,'YTick',Y);
+                %set(gca,'xscale','log')
+                set(gca,'YTickLabel',{'Small' 'Medium' 'Large' 'X-Large' 'Original'}); ;
+                set(gca,'XTickLabel',X);
+                xlim([40 3500]);
+                ylim([0.5 5.5]);
+                xlabel('Screen Width');
+                ylabel('Selected Qualities');           
+                title ('Screen Width vs Selected Quality');
+
+                %plot([320 320], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+                %plot([640 640], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+                %plot([1024 1024], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+                %plot([2048 2048], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+
+                %handle = figure(2);
+                %save2Files2([0 1 1], [plot_path '\\'], 'Allgemein', handle, 2);
+            end
+
             if(strcmp(algorithm,'\tptBackground') || strcmp(algorithm,'\tptOTF'))
                 %Max downlink speed vs Bildauflösung
                 figure(2); hold all; box on; 
@@ -114,6 +145,27 @@ for j=runs
                 ylabel('Selected Qualities');           
                 title ('Max Download Speed vs Selected Qualities');
 
+            end
+
+            if(strcmp(algorithm,'\tptOTF'))
+                %Max downlink speed vs Bildauflösung
+                figure(3); hold all; box on; 
+                Y=[1 2 3 4 5];
+                %X=[0.5 2 3 8 12];
+                scatter(tptKBsShift{j}, qualityArrayShift{j}, 'r', 'x');
+                %set(gca,'XTick',X);
+                set(gca,'YTick',Y);
+                %set(gca,'xscale','log')
+                set(gca,'YTickLabel',{'Small' 'Medium' 'Large' 'X-Large' 'Original'}); ;
+                %set(gca,'XTickLabel',X);
+                %xlim([0 12.5]);
+                ylim([0.5 5.5]);
+                plot([100 100], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+                plot([300 300], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+                plot([500 500], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+                xlabel('Download Speed in KB/s');
+                ylabel('Selected Qualities');           
+                title ('Download Speed vs Selected Quality');
             end
 
             if(strcmp(algorithm,'\allgemein'))
@@ -142,4 +194,10 @@ end
 if(~(strcmp(algorithm,'\allgemein')))
     handle = figure(2);
     save2Files2([0 1 1], [plot_path '\\'], strrep(algorithm, '\\', ''), handle, 2);
+end
+
+if(strcmp(algorithm,'\tptOTF'))
+    handle = figure(3);
+    save2Files2([0 1 1], [plot_path '\\'], [strrep(algorithm, '\\', '') '_valid'], handle, 2);
+    xxx=22
 end
