@@ -122,7 +122,7 @@ function getLatency(ret, count) {
        $readyForTesting=true;
        $startup=false;
     }
-    sendServerLog("Set_New_Server "+$server+ " Mode "+$serverMode + " Latency "+ $latency);
+    sendServerLog("Set_New_Server "+$server+ " Mode "+$serverMode + " Latency "+ $latency + " AllLatencies " + $latencyArray);
   }
 };
 

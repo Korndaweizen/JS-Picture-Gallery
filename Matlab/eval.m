@@ -12,7 +12,7 @@ screen_sizes = [320 640 1024 2048 4096]
 
 algorithms= {'\tptOTF' '\tptBackground' '\ownSrcSet' '\allgemein' '\ownSrcSetvalidate'}
 
-algorithm=algorithms{5}
+algorithm=algorithms{1}
 
 runs=[1];
 for j=runs
@@ -30,17 +30,18 @@ for j=runs
 
             fileID = fopen(current_file)
             %Client
-            C = textscan(fileID,'%*d %*s %*s %*s %s %*s %s %*s %d %*s %d %*s %f %*s %d %*s %s %*s %*s %*s','HeaderLines',1);
+            C = textscan(fileID,'%f %*s %*s %*s %s %*s %s %*s %d %*s %d %*s %f %*s %d %*s %s %*s %*s %*s','HeaderLines',1);
             fclose(fileID);
             %celldisp(C);
 
-            quality{j} = C{1};
-            qualityMode{j} = C{2};
-            loadTimeMS{j} = C{3};
-            imgSizeByte{j} = C{4};
-            tptKBs{j} = C{5};
-            picNo{j} = C{6};
-            serverAddress{j} = C{7};
+            timestamp{j}     = C{1}.-C{1}(1);
+            quality{j}       = C{2};
+            qualityMode{j}   = C{3};
+            loadTimeMS{j}    = C{4};
+            imgSizeByte{j}   = C{5};
+            tptKBs{j}        = C{6};
+            picNo{j}         = C{7};
+            serverAddress{j} = C{8};
 
 
             for g=1:size(quality{j})
@@ -116,7 +117,7 @@ for j=runs
                 xlim([40 3500]);
                 ylim([0.5 5.5]);
                 xlabel('Screen Width');
-                ylabel('Selected Qualities');           
+                ylabel('Selected Quality');           
                 title ('Screen Width vs Selected Quality');
 
                 %plot([320 320], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
@@ -148,7 +149,9 @@ for j=runs
             end
 
             if(strcmp(algorithm,'\tptOTF'))
-                %Max downlink speed vs Bildauflösung
+            
+                %Validate
+
                 figure(3); hold all; box on; 
                 Y=[1 2 3 4 5];
                 %X=[0.5 2 3 8 12];
@@ -163,8 +166,8 @@ for j=runs
                 plot([100 100], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
                 plot([300 300], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
                 plot([500 500], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
-                xlabel('Download Speed in KB/s');
-                ylabel('Selected Qualities');           
+                xlabel('Dl Speed of prev. Img in KB/s');
+                ylabel('Selected Quality');           
                 title ('Download Speed vs Selected Quality');
             end
 

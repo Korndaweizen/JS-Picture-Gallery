@@ -1,6 +1,6 @@
 var tests = ['radio_ownsrcset', 'radio_qtpt', 'radio_qtptotf', 'radio_uncompressed', 'radio_large', 'radio_medium', 'radio_small'];
 var numberOfTestPictures = 10;
-var numberOfTestRuns = 10;
+var numberOfTestRuns = 100;
 
 
 function justWait(time,callback){
