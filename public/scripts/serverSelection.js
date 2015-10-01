@@ -34,7 +34,7 @@ function changeServerMode(){
     if(!($("#radio_htpt").is(":checked")) && !($("#radio_lpng").is(":checked"))){
       $serverMode=$MANUAL;
     }
-    sendServerLog("Changed_Server_Mode "+$serverMode);
+    console.log("Changed_Server_Mode "+$serverMode);
     setServer();
 };
 
@@ -77,7 +77,7 @@ function setServerByHand() {
   for (var i=0; i<$servers.length; i++) {
     if(count==checkup){
       $server="http://"+$servers[i]+"/";
-      sendServerLog("Set_New_Server "+$server+ " Mode "+$serverMode);
+      console.log("Set_New_Server "+$server+ " Mode "+$serverMode);
     }
     count=count+1;
   }
@@ -96,12 +96,12 @@ function getLatency(ret, count) {
     var tmplatency=ret[0];
     tmpUrl=ret[1].replace("images/small.bmp", "");
     $latencyArray[count]=tmplatency;
-    sendServerLog("Evaluate_Server "+tmpUrl+ " Mode "+$serverMode + " Latency "+ tmplatency);
+    console.log("Evaluate_Server "+tmpUrl+ " Mode "+$serverMode + " Latency "+ tmplatency);
     //console.log("Server: "+tmpUrl+", latency: "+tmplatency); 
     if(tmplatency<$latency){
       $latency=tmplatency;
       $temporalBestServer=tmpUrl;
-      sendServerLog("Updated_Best_Server "+tmpUrl+ " Mode "+$serverMode + " Latency "+ tmplatency); 
+      console.log("Updated_Best_Server "+tmpUrl+ " Mode "+$serverMode + " Latency "+ tmplatency); 
     } 
   }      
   count++;
@@ -122,7 +122,11 @@ function getLatency(ret, count) {
        $readyForTesting=true;
        $startup=false;
     }
-    sendServerLog("Set_New_Server "+$server+ " Mode "+$serverMode + " Latency "+ $latency + " AllLatencies " + $latencyArray);
+    var latencyArrayString="";
+    for (var i=0; i <$latencyArray.length; i++){
+      latencyArrayString+=$latencyArray[i]+" ";
+    }
+    sendServerLog("Set_New_Server "+$server+ " Mode "+$serverMode + " Latency "+ $latency + " AllLatencies " + latencyArrayString);
   }
 };
 

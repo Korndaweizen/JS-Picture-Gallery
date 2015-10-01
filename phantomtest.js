@@ -46,7 +46,7 @@ function waitFor(testFx, onReady, timeOutMillis) {
 };
 
 function waitForPictureVisible(onReady, timeOutMillis) {
-    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 60000; //< Default Max Timout is 60s  
+    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 600000; //< Default Max Timout is 600s  
 
     // Wait for 'centered picture' to be visible
     waitFor(function() {
@@ -100,7 +100,7 @@ function waitForTestingRecursive(counter) {
         //page.evaluate(function() {
         //    newLog();
         //});
-        justWait(30000, function(){
+        justWait(5000, function(){
         	runTestRow(numberOfTestPictures);
         	waitForReadyForTesting( function() {
                   waitForTestingRecursive(counter-1);
@@ -130,7 +130,7 @@ function runTestSet(numberOfTestPictures, numberOfTestRuns) {
         });
         console.log("Starting Test Row");
         page.evaluate(function() {
-            var algorithm='radio_ownsrcset';
+            var algorithm='radio_qtptotf';
         	  //var tests = ['radio_ownsrcset', 'radio_qtpt', 'radio_qtptotf', 'radio_uncompressed', 'radio_large', 'radio_medium', 'radio_small'];
         	  //var count =0;
             $("#"+algorithm).click();
