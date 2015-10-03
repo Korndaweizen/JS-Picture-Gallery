@@ -12,7 +12,7 @@ screen_sizes = [320 640 1024 2048 4096]
 
 algorithms= {'\tptOTF' '\tptBackground' '\ownSrcSet' '\allgemein' '\ownSrcSetvalidate'}
 
-algorithm=algorithms{1}
+algorithm=algorithms{2}
 
 runs=[1];
 for j=runs
