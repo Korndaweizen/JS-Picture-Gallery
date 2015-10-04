@@ -27,11 +27,13 @@ body {
 }
 .imgButton_Previous {
   left: 0;
-  position: absolute;
+  top: 48%;
+  position: fixed;
 }
 .imgButton_Next {
   right: 0;
-  position: absolute;
+  top: 48%;
+  position: fixed;
 }
 .imageContainer {
   max-width: 80%;

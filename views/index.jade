@@ -53,13 +53,7 @@ block content
       imageContainer.style.height = "auto";
       imageContainer.className += " imageContainer";
 
-      if(imgNo>1){
-        createButton(imageContainer, "Previous", function(event){
-          event.stopPropagation();
-          $('html').click();
-          drawpicture(imgNo-1);
-        });         
-      }
+
 
       var a = document.createElement('a');
       imageContainer.appendChild(a);
@@ -76,6 +70,14 @@ block content
         actualImage.className+="centered_image"
         a.appendChild(actualImage);
       });
+
+      if(imgNo>1){
+        createButton(imageContainer, "Previous", function(event){
+          event.stopPropagation();
+          $('html').click();
+          drawpicture(imgNo-1);
+        });         
+      }
 
       if(imgNo<25){
         createButton(imageContainer,"Next", function(event){
