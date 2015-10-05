@@ -62,13 +62,12 @@ set(handle,'PaperSize',position(3:4));
 
 % Set font size and line width
 
-
 allfonts=[findall(handle,'type','text');findall(handle,'type','axes')];
 allLines  = findall(handle, 'type', 'line');
 allMarkers = findobj(handle,'type','patch'); % Find objects of type 'patch'
 set(allfonts,'FontSize',fontsize);
 set(allLines,'LineWidth',linewidth);
-set(allMarkers,'LineWidth', linewidth); 
+%set(allMarkers,'LineWidth', linewidth); 
 
 % Save the pdf (this is the same method used by "saveas")
 print(handle,'-dpdf',pdfFileName,sprintf('-r%d',dpi));

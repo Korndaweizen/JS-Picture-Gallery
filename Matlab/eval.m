@@ -205,13 +205,8 @@ if(strcmp(algorithm,'\tptOTF'))
     xxx=22
 end
 
-%Signaling
 figure(2); clf; hold all; box on; 
-Y=[22.6, 26.9
-   22.3, 120]
-h = bar (Y);
-title ('bar() graph w/multiple bars');
-
-print('-djpeg','Signaling.jpg'); 
+y = [0 100; 50 50; 90 10;40 60];
+bar(y,'stacked')
 handle = figure(2);
-save2Files2([0 1 1], [plot_path '\\'], 'Signaling', handle, 2);
+save2Files2([0 1 1], [plot_path '\\'], 'asd', handle, 2);
