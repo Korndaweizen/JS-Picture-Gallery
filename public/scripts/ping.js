@@ -33,7 +33,7 @@ var ping = function(url, multiplier) {
         };
         var badResponse = function() { 
             var retval=[];
-            retval[0]= 99999;
+            retval[0]= 9999999;
             retval[0] *= (multiplier || 1);
             retval[1]=url;
             resolve(retval); 

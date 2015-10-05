@@ -8,11 +8,11 @@ plot_path='E:\Git\gallery\log';
 %Home
 plot_path='E:\Git\gallery\log';
 
-screen_sizes = [320 640 1024 2048 4096]
+screen_sizes = [320 640 1024 2048 4096];
 
-algorithms= {'\tptOTF' '\tptBackground' '\ownSrcSet' '\allgemein' '\ownSrcSetvalidate'}
+algorithms= {'\tptOTF' '\tptBackground' '\ownSrcSet' '\allgemein' '\ownSrcSetvalidate'};
 
-algorithm=algorithms{2}
+algorithm=algorithms{1};
 
 runs=[1];
 for j=runs
@@ -23,12 +23,12 @@ for j=runs
     
     
     for i=1:number_of_files
-            current_file = fullfile([plot_path algorithm],dirListing(i).name)
+            current_file = fullfile([plot_path algorithm],dirListing(i).name);
 
-            filename=strrep(dirListing(i).name, '.csv', '')
-            filename=strrep(filename, 'mbit', '')
+            filename=strrep(dirListing(i).name, '.csv', '');
+            filename=strrep(filename, 'mbit', '');
 
-            fileID = fopen(current_file)
+            fileID = fopen(current_file);
             %Client
             C = textscan(fileID,'%f %*s %*s %*s %s %*s %s %*s %d %*s %d %*s %f %*s %d %*s %s %*s %*s %*s','HeaderLines',1);
             fclose(fileID);
@@ -69,7 +69,7 @@ for j=runs
                     screensize{j}(g)=str2double(filename);
                 end 
                 if(strcmp(algorithm,'\tptBackground') || strcmp(algorithm,'\tptOTF'))
-                    maxDLink{j}(g)=str2double(filename)
+                    maxDLink{j}(g)=str2double(filename);
                 end                                                    
             end
 
@@ -204,3 +204,14 @@ if(strcmp(algorithm,'\tptOTF'))
     save2Files2([0 1 1], [plot_path '\\'], [strrep(algorithm, '\\', '') '_valid'], handle, 2);
     xxx=22
 end
+
+%Signaling
+figure(2); clf; hold all; box on; 
+Y=[22.6, 26.9
+   22.3, 120]
+h = bar (Y);
+title ('bar() graph w/multiple bars');
+
+print('-djpeg','Signaling.jpg'); 
+handle = figure(2);
+save2Files2([0 1 1], [plot_path '\\'], 'Signaling', handle, 2);
