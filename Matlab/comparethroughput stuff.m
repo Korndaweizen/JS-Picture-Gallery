@@ -15,7 +15,9 @@ algorithms= {'\changingthroughput'};
 algorithm=algorithms{1};
 
 nameArray=[];
-toBePlotted=[];
+correctIncorrect=[];
+trafficArray=[];
+timeArray=[];
 
 runs=[1];
 for j=runs
@@ -48,6 +50,8 @@ for j=runs
 
             correct=0;
             mistaken=0;
+            traffic=sum(imgSizeByte{j})./1000000
+            time=sum(loadTimeMS{j})./60000
 
             nameArray=[nameArray; filename];
 
@@ -92,32 +96,67 @@ for j=runs
                     else
                         mistaken++;
                     end
-                end                                                
+                end   
             end
 
             set (gcf, "papersize", [6.4, 4.8]); 
             set (gcf, "paperposition", [0, 0, 6.4, 4.8]);
 
-            toBePlotted=[toBePlotted; correct, mistaken];
+            correctIncorrect=[correctIncorrect; correct, mistaken];
+            trafficArray=[trafficArray; traffic];
+            timeArray=[timeArray; time];
 
     end
 end
 
-toBePlotted
+correctIncorrect
 nameArray
+timeArray(1)=round(timeArray(1)*100)/100;
+timeArray(2)=round(timeArray(2)*100)/100;
 
-celldata = cellstr(nameArray)
+celldata1 = cellstr(nameArray)
+
+
 
 figure(2); clf; hold all; box on;
 set(gca,'YTick',[0:10:100]);
 xlim([0.5 2.5])
-bar(toBePlotted./10,'stacked');
+bar(correctIncorrect./10,'stacked');
 h = legend ('Correct', 'Incorrect');
-legend (h, 'location', 'southoutside');
+legend (h, 'location', 'northoutside');
 legend boxoff
-set(gca,'XTickLabel',{' ' celldata{1} '' celldata{2} ''});
-text (0.875, 50, "78,3%");
-text (1.875, 50, " 95%");
+set(gca,'XTickLabel',{' ' celldata1{1} '' celldata1{2} ''});
+text (0.875, 50, "78,3%", 'Color', 'white');
+text (1.875, 50, " 95%", 'Color', 'white');
 
 handle = figure(2);
-save2Files2([0 1 1], [plot_path '\\'], 'test', handle, 2);
+save2Files2([0 1 1], [plot_path '\\'], 'correctnessinpercent_idle_otf', handle, 2);
+
+
+figure(2); clf; hold all; box on;
+%set(gca,'YTick',[0:10:100]);
+xlim([0.5 2.5])
+bar(trafficArray);
+%h = legend ('Download volume');
+%legend (h, 'location', 'northoutside');
+%legend boxoff
+set(gca,'XTickLabel',{' ' celldata1{1} '' celldata1{2} ''});
+text (0.8, trafficArray(1)+35, [num2str(trafficArray(1)) " MB"]);
+text (1.8, trafficArray(2)+35, [num2str(trafficArray(2)) " MB"]);
+
+handle = figure(2);
+save2Files2([0 1 1], [plot_path '\\'], 'traffic_idle_otf', handle, 2);
+
+figure(2); clf; hold all; box on;
+%set(gca,'YTick',[0:10:100]);
+xlim([0.5 2.5])
+bar(timeArray);
+%h = legend ('Download time');
+%legend (h, 'location', 'northoutside');
+%legend boxoff
+set(gca,'XTickLabel',{' ' celldata1{1} '' celldata1{2} ''});
+text (0.8, timeArray(1)+2, [num2str(timeArray(1)) " Min"]);
+text (1.8, timeArray(2)+2, [num2str(timeArray(2)) " Min"]);
+
+handle = figure(2);
+save2Files2([0 1 1], [plot_path '\\'], 'time_idle_otf', handle, 2);
