@@ -14,6 +14,14 @@ algorithms= {'\tptOTF' '\tptBackground' '\ownSrcSet' '\allgemein' '\ownSrcSetval
 
 algorithm=algorithms{1};
 
+plotArray{1}=[];
+plotArray{2}=[];
+plotArray{3}=[];
+plotArray{4}=[];
+plotArray{5}=[];
+
+supertemp=0
+
 runs=[1];
 for j=runs
     current_folder = fullfile([plot_path algorithm],'*.csv');
@@ -39,7 +47,7 @@ for j=runs
             qualityMode{j}   = C{3};
             loadTimeMS{j}    = C{4};
             imgSizeByte{j}   = C{5};
-            tptKBs{j}        = C{6};
+            tptKBs{j}        = C{6}.*8;
             picNo{j}         = C{7};
             serverAddress{j} = C{8};
 
@@ -47,31 +55,39 @@ for j=runs
             for g=1:size(quality{j})
                 check=quality{j}{g};
                 if(strcmp(check,'small'))
-                    qualityArray{j}(g)=1;
+                    qualityArray{j}(g)=supertemp=1
                 end
                 if(strcmp(check,'medium'))
-                    qualityArray{j}(g)=2;
+                    qualityArray{j}(g)=supertemp=2;
                 end
                 if(strcmp(check,'large'))
-                   qualityArray{j}(g)=3;
+                   qualityArray{j}(g)=supertemp=3;
                 end
                 if(strcmp(check,'xlarge'))
-                    qualityArray{j}(g)=4;
+                    qualityArray{j}(g)=supertemp=4;
                 end
                 if(strcmp(check,'uncompressed'))
-                    qualityArray{j}(g)=5;
+                    qualityArray{j}(g)=supertemp=5;
                     if(strcmp(algorithm,'\allgemein'))
                         qualityArray{j}(g)=6;
                     end
                 end 
 
-                if(strcmp(algorithm,'\ownSrcSet') || strcmp(algorithm,'\ownSrcSetvalidate'))
+                if(strcmp(algorithm,'\ownSrcSet'))
                     screensize{j}(g)=str2double(filename);
+                end
+
+                if(strcmp(algorithm,'\ownSrcSetvalidate'))
+                    plotArray{supertemp}=[plotArray{supertemp} picNo{j}(g)]
                 end 
+
                 if(strcmp(algorithm,'\tptBackground') || strcmp(algorithm,'\tptOTF'))
                     maxDLink{j}(g)=str2double(filename);
                 end                                                    
             end
+
+            plotArray
+            supertemp
 
             if(strcmp(algorithm,'\tptOTF'))
                 for g=1:(size(tptKBs{j})-1)
@@ -90,7 +106,7 @@ for j=runs
                 X=[320 640 1024 2064 4096];
                 scatter (screensize{j}, qualityArray{j}, 'r');
                 set(gca,'XTick',X);
-                set(gca,'YTick',Y);
+                set(gca,'YTick',[1 2 3 4 5]);
                 set(gca,'xscale','log')
                 set(gca,'YTickLabel',{'Small' 'Medium' 'Large' 'X-Large' 'Original'}); ;
                 set(gca,'XTickLabel',X);
@@ -98,7 +114,7 @@ for j=runs
                 ylim([0.5 5.5]);
                 xlabel('Screen Width');
                 ylabel('Selected Qualities');           
-                title ('Screen Resolution vs Selected Qualities');
+                %title ('Screen Resolution vs Selected Qualities');
                 %handle = figure(2);
                 %save2Files2([0 1 1], [plot_path '\\'], 'Allgemein', handle, 2);
             end
@@ -106,19 +122,44 @@ for j=runs
             if(strcmp(algorithm,'\ownSrcSetvalidate'))
                 %Quality Modes vs Picture Size in KB
                 figure(2); hold all; box on; 
-                Y=[1 2 3 4 5];
                 X=[320 640 1024 2064 4096];
-                scatter(picNo{j}, qualityArray{j}, 'r', 'x');
+                %scatter(picNo{j}, qualityArray{j}, 'r', 'x');
+
+                Y(1:length(plotArray{1}))=1
+                scatter(plotArray{1}, Y, 'r', 'x', 'LineWidth',2);
+
+                Y(1:length(plotArray{2}))=2
+                scatter(plotArray{2}, Y, 'b', 'x', 'LineWidth',2);
+
+                Y(1:length(plotArray{3}))=3
+                scatter(plotArray{3}, Y, 'g', 'x', 'LineWidth',2);
+
+                Y(1:length(plotArray{4}))=4
+                scatter(plotArray{4}, Y, 'c', 'x', 'LineWidth',2);
+
+                Y(1:length(plotArray{5}))=5
+                scatter(plotArray{5}, Y, 'm', 'x', 'LineWidth',2);
+
                 set(gca,'XTick',X);
-                set(gca,'YTick',Y);
+                set(gca,'YTick',[1 2 3 4 5]);
                 %set(gca,'xscale','log')
                 set(gca,'YTickLabel',{'Small' 'Medium' 'Large' 'X-Large' 'Original'}); ;
                 set(gca,'XTickLabel',X);
                 xlim([40 3500]);
                 ylim([0.5 5.5]);
-                xlabel('Screen Width');
-                ylabel('Selected Quality');           
-                title ('Screen Width vs Selected Quality');
+                xlabel('Viewport Width in pixels');
+                ylabel('Selected Quality'); 
+
+                allfonts=[findall(2,'type','text');findall(2,'type','axes')];
+                set(allfonts,'FontSize',16);
+      
+                h = legend ('Small', 'Medium', 'Large', 'X-Large', 'Original');
+                rect =  [0.69,0.15,0.2,0.4];
+                set(h, 'Position', rect)
+                allMarkers = findobj(2,'type','patch'); % Find objects of type 'patch'
+                set(allMarkers,'LineWidth', 2);
+      
+                %title ('Screen Width vs Selected Quality');
 
                 %plot([320 320], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
                 %plot([640 640], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
@@ -126,7 +167,7 @@ for j=runs
                 %plot([2048 2048], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
 
                 %handle = figure(2);
-                %save2Files2([0 1 1], [plot_path '\\'], 'Allgemein', handle, 2);
+                %save2Files2([0 1 1], [plot_path '\\'], 'ownSrcSetvalidate', handle, 2);
             end
 
             if(strcmp(algorithm,'\tptBackground') || strcmp(algorithm,'\tptOTF'))
@@ -144,7 +185,7 @@ for j=runs
                 ylim([0.5 5.5]);
                 xlabel('Max Download Speed in Mbit');
                 ylabel('Selected Qualities');           
-                title ('Max Download Speed vs Selected Qualities');
+                %title ('Max Download Speed vs Selected Qualities');
 
             end
 
@@ -154,21 +195,21 @@ for j=runs
 
                 figure(3); hold all; box on; 
                 Y=[1 2 3 4 5];
-                %X=[0.5 2 3 8 12];
-                scatter(tptKBsShift{j}, qualityArrayShift{j}, 'r', 'x');
-                %set(gca,'XTick',X);
+                X=[0.8 2.4 4 6 8];
+                scatter(tptKBsShift{j}./1000, qualityArrayShift{j}, 'r', 'x');
+                set(gca,'XTick',X);
                 set(gca,'YTick',Y);
                 %set(gca,'xscale','log')
                 set(gca,'YTickLabel',{'Small' 'Medium' 'Large' 'X-Large' 'Original'}); ;
                 %set(gca,'XTickLabel',X);
-                %xlim([0 12.5]);
+                xlim([0 8]);
                 ylim([0.5 5.5]);
-                plot([100 100], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
-                plot([300 300], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
-                plot([500 500], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
-                xlabel('Dl Speed of prev. Img in KB/s');
+                plot([0.8 0.8], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+                plot([2.4 2.4], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+                plot([4 4], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+                xlabel('Dl Speed of prev. Img in Mbps');
                 ylabel('Selected Quality');           
-                title ('Download Speed vs Selected Quality');
+                %title ('Download Speed vs Selected Quality');
             end
 
             if(strcmp(algorithm,'\allgemein'))
@@ -184,10 +225,10 @@ for j=runs
                 xlim([0.5 4.5]);
                 ylabel('Picture Size in KB');
                 xlabel('Quality Modes');           
-                title ('Quality Modes vs Picture Size in KB');
+                %title ('Quality Modes vs Picture Size in KB');
                 print('-djpeg','Allgemein.jpg'); 
                 handle = figure(2);
-                save2Files2([0 1 1], [plot_path '\\'], 'Allgemein', handle, 2);
+                save2Files2([0 1 1], [plot_path '\\'], 'content', handle, 2);
             end
 
 
@@ -201,12 +242,13 @@ end
 
 if(strcmp(algorithm,'\tptOTF'))
     handle = figure(3);
+    allMarkers = findobj(3,'type','patch');
+    set(allMarkers,'LineWidth', 2);
     save2Files2([0 1 1], [plot_path '\\'], [strrep(algorithm, '\\', '') '_valid'], handle, 2);
-    xxx=22
 end
 
-figure(2); clf; hold all; box on; 
-y = [0 100; 50 50; 90 10;40 60];
-bar(y,'stacked')
-handle = figure(2);
-save2Files2([0 1 1], [plot_path '\\'], 'asd', handle, 2);
+%figure(2); clf; hold all; box on; 
+%y = [0 100; 50 50; 90 10;40 60];
+%bar(y,'stacked')
+%handle = figure(2);
+%save2Files2([0 1 1], [plot_path '\\'], 'asd', handle, 2);
