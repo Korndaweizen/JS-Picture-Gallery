@@ -28,7 +28,7 @@ if runs >1
     % V=sum((A(~isnan(A))-repmat(M,prod(H)-sum(isnan(A)),1)).^2,dim)/(runs-1);
     %
     % UPDATE: obiges is albern, nansum tut das selbe
-    V=nansum((A-repmat(M,H)).^2,dim)/(runs-1);
+    V=nansum((A-repmat(M,H)).^2,dim)/(runs-1)
     C=-tinv((1-proz)/2/2,(runs-1))*sqrt(V/runs);
 else
      C = 0;
