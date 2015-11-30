@@ -3,7 +3,7 @@ $server="http://78.46.49.57:21210/";
 $latency=9999999;
 $temporalBestServer="";
 $timer=null;
-$timerInterval=30; //Seconds
+$timerInterval=30; //Seconds default=30
 $latencyArray=[];
 $serverMode="";
 
@@ -60,7 +60,7 @@ function setServer() {
 function setServerByHighestTpt() {
     console.log("Server-selection by tpt:");
     $server="http://78.46.49.57:21210/";
-    sendServerLog("Set_New_Server "+$server+ " Mode "+$serverMode);    
+    sendLog("Set_New_Server "+$server+ " Mode "+$serverMode);    
 };
 
 function setServerByLowestlatency() {
@@ -93,7 +93,7 @@ function setServerByHand() {
 function getLatency(ret, count) {
   var tmpUrl="";
   if(count >= 0){
-    var tmplatency=ret[0];
+    var tmplatency=ret[0]/2;
     tmpUrl=ret[1].replace("images/small.bmp", "");
     $latencyArray[count]=tmplatency;
     console.log("Evaluate_Server "+tmpUrl+ " Mode "+$serverMode + " Latency "+ tmplatency);

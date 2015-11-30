@@ -1,7 +1,7 @@
 $quality="medium";
 $qualityMode="";
 $qualityTimer=null;
-$qualityTimerInterval=30; //Seconds
+$qualityTimerInterval=30; //Seconds 30 is default
 $backgroudDLrunning=false;
 $inbetweenPicDL=false;
 
@@ -131,15 +131,15 @@ function getTptOTF(imgUrl,imgNo) {
 
 function setQualityByTpt(throughput){
   var quality=$quality;
-  //if(throughput!=3000)
+  if(throughput>=5600)
     $quality="uncompressed";
-  if(throughput<1500)
+  if(throughput<5600)
     $quality="xlarge";
-  if(throughput<500)
+  if(throughput<1230)
     $quality="large";
-  if(throughput<300)
+  if(throughput<330)
     $quality="medium";
-  if(throughput<100)
+  if(throughput<140)
     $quality="small";
   if (quality != $quality)
     sendLog("Set_New_Quality "+$quality+ " Mode "+$qualityMode + " Throughput_In_KB_s " + throughput + " ServerIP " + $server);

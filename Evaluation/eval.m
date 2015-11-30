@@ -4,9 +4,9 @@ clear all
 
 %% Setup variables
 %Uni
-plot_path='E:\Git\gallery\log';
+plot_path='E:\git\picgallery\Evaluation\log';
 %Home
-plot_path='E:\Git\gallery\log';
+%plot_path='E:\Git\gallery\log';
 
 screen_sizes = [320 640 1024 2048 4096];
 
@@ -170,24 +170,24 @@ for j=runs
                 %save2Files2([0 1 1], [plot_path '\\'], 'ownSrcSetvalidate', handle, 2);
             end
 
-            if(strcmp(algorithm,'\tptBackground') || strcmp(algorithm,'\tptOTF'))
-                %Max downlink speed vs Bildauflösung
-                figure(2); hold all; box on; 
-                Y=[1 2 3 4 5];
-                X=[0.5 2 3 8 12];
-                scatter (maxDLink{j}, qualityArray{j}, 'r');
-                set(gca,'XTick',X);
-                set(gca,'YTick',Y);
-                %set(gca,'xscale','log')
-                set(gca,'YTickLabel',{'Small' 'Medium' 'Large' 'X-Large' 'Original'}); ;
-                set(gca,'XTickLabel',X);
-                xlim([0 12.5]);
-                ylim([0.5 5.5]);
-                xlabel('Max Download Speed in Mbit');
-                ylabel('Selected Qualities');           
-                %title ('Max Download Speed vs Selected Qualities');
-
-            end
+            %if(strcmp(algorithm,'\tptBackground') || strcmp(algorithm,'\tptOTF'))
+            %    %Max downlink speed vs Bildauflösung
+            %    figure(2); hold all; box on; 
+            %    Y=[1 2 3 4 5];
+            %    X=[0.5 2 3 8 12];
+            %    scatter (maxDLink{j}, qualityArray{j}, 'r');
+            %    set(gca,'XTick',X);
+            %    set(gca,'YTick',Y);
+            %    %set(gca,'xscale','log')
+            %    set(gca,'YTickLabel',{'Small' 'Medium' 'Large' 'X-Large' 'Original'}); ;
+            %    set(gca,'XTickLabel',X);
+            %    xlim([0 12.5]);
+            %    ylim([0.5 5.5]);
+            %    xlabel('Max Download Speed in Mbit');
+            %    ylabel('Selected Qualities');           
+            %    %title ('Max Download Speed vs Selected Qualities');
+            %
+            %end
 
             if(strcmp(algorithm,'\tptOTF'))
             
@@ -195,18 +195,18 @@ for j=runs
 
                 figure(3); hold all; box on; 
                 Y=[1 2 3 4 5];
-                X=[0.8 2.4 4 6 8];
+                X=[1.1 2.6 4 6 8 9.8 12];
                 scatter(tptKBsShift{j}./1000, qualityArrayShift{j}, 'r', 'x');
                 set(gca,'XTick',X);
                 set(gca,'YTick',Y);
                 %set(gca,'xscale','log')
                 set(gca,'YTickLabel',{'Small' 'Medium' 'Large' 'X-Large' 'Original'}); ;
                 %set(gca,'XTickLabel',X);
-                xlim([0 8]);
+                xlim([0 13]);
                 ylim([0.5 5.5]);
-                plot([0.8 0.8], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
-                plot([2.4 2.4], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
-                plot([4 4], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+                plot([1.12 1.12], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+                plot([2.64 2.64], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
+                plot([9.84 9.84], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
                 xlabel('Dl Speed of prev. Img in Mbps');
                 ylabel('Selected Quality');           
                 %title ('Download Speed vs Selected Quality');
@@ -235,10 +235,10 @@ for j=runs
     end
 end
 
-if(~(strcmp(algorithm,'\allgemein')))
-    handle = figure(2);
-    save2Files2([0 1 1], [plot_path '\\'], strrep(algorithm, '\\', ''), handle, 2);
-end
+%if(~(strcmp(algorithm,'\allgemein')))
+%    handle = figure(2);
+%    save2Files2([0 1 1], [plot_path '\\'], strrep(algorithm, '\\', ''), handle, 2);
+%end
 
 if(strcmp(algorithm,'\tptOTF'))
     handle = figure(3);
