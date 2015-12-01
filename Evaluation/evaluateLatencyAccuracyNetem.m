@@ -1,10 +1,10 @@
 %%
 clear all
-
+pkg load statistics
 
 %% Setup variables
 %Uni
-plot_path='E:\git\picgallery\Evaluation\log';
+plot_path='E:\git\gallery\Evaluation\log';
 %Home
 %plot_path='E:\Git\gallery\log';
 
@@ -15,6 +15,7 @@ dirListing = dir(current_folder);
 number_of_files = length(dirListing);
 
 selectedLatencyArray=[];
+intervalArray=[];
 maxLatencyArray=[];
 
 for j=1:number_of_files
@@ -41,7 +42,11 @@ for j=1:number_of_files
             maxLatency{j}(g)=str2double(filename);                                                
         end
         
-        selectedLatencyArray=[selectedLatencyArray mean(selectedLatency{j})];
+        [M,C] = nanmeanConfInt(selectedLatency{j}, 0.95, 1);
+        intervalArray=[intervalArray C];
+
+
+        selectedLatencyArray=[selectedLatencyArray M];
         maxLatencyArray=[maxLatencyArray mean(maxLatency{j})];
 end
 
@@ -52,22 +57,24 @@ set (gcf, "paperposition", [0, 0, 6.4, 4.8]);
 
 figure(2); hold all; box on; 
 
-plot([0 1000], [0 1000],':');
-scatter (maxLatencyArray, selectedLatencyArray.-selectedLatencyArray(1), 'r', 'x');
+plot([0 130], [0 130],':');
+%scatter (maxLatencyArray, selectedLatencyArray.-selectedLatencyArray(1), 'r', 'x');
+h1=errorbar(maxLatencyArray,selectedLatencyArray.-selectedLatencyArray(1),intervalArray,'r');
 
-XY=[0:10:100];
+XY=[0:10:130];
 set(gca,'XTick',XY);
 set(gca,'YTick',XY);
 
-xlim([-1 100]);
-ylim([-1 100]);
+xlim([-1 130]);
+ylim([-1 130]);
 
-xlabel('Set latency [ms]');
-ylabel('Estimated average latency [ms]');           
+xlabel('Set Latency [ms]');
+ylabel('Latency [ms]');           
 
 allfonts=[findall(2,'type','text');findall(2,'type','axes')];
 set(allfonts,'FontSize',16);
-h = legend ( 'Baseline','Estimated Latency');
+h = legend ([h1],{'Estimated Latency'});
+
 rect =  [0.5,0.1431,0.405,0.1925];
 set(h, 'Position', rect)
 

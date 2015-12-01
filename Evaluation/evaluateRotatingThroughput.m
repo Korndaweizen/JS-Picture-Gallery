@@ -4,7 +4,7 @@ clear all
 
 %% Setup variables
 %Uni
-plot_path='E:\git\picgallery\Evaluation\log';
+plot_path='E:\git\gallery\Evaluation\log';
 %Home
 %plot_path='E:\Git\gallery\log';
 
@@ -100,8 +100,9 @@ for i=runs
 
             set (gcf, "papersize", [6.4, 4.8]); 
             set (gcf, "paperposition", [0, 0, 6.4, 4.8]);
-
-            correctIncorrect=[correctIncorrect; correct, mistaken];
+            if(j>1)
+            	correctIncorrect=[correctIncorrect; correct, mistaken];
+            end
             trafficArray=[trafficArray; traffic];
             timeArray=[timeArray; time];         
 
@@ -122,7 +123,10 @@ celldata1 = cellstr(nameArray)
 
 figure(2); clf; hold all; box on;
 set(gca,'YTick',[0:10:100]);
-xlim([1.5 3.5])
+xlim([0.5 2.5])
+
+correctIncorrect(1)
+
 bar(correctIncorrect,'stacked');
 h = legend ('Correct', 'Incorrect');
 legend (h, 'location', 'northoutside');
@@ -130,7 +134,6 @@ legend boxoff
 set(gca,'XTickLabel',{' ' celldata1{2} '' celldata1{3} ''});
 text (0.875, 50, [num2str(correctIncorrect(1)) '%'], 'Color', 'white');
 text (1.875, 50, [num2str(correctIncorrect(2)) '%'], 'Color', 'white');
-text (2.875, 50, [num2str(correctIncorrect(3)) '%'], 'Color', 'white');
 
 handle = figure(2);
 save2Files2([0 1 1], [plot_path '\\'], 'correctnessinpercent_idle_otf', handle, 2);
@@ -189,7 +192,7 @@ set(gca,'XTick',X);
 set(gca,'XTickLabel',X);
 plot([1.3 1.3], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
 xlabel('Picture load time [s]');
-ylabel('Selected Quality'); 
+ylabel('Image Size'); 
 
 handle = figure(2);
 allMarkers = findobj(2,'type','patch');

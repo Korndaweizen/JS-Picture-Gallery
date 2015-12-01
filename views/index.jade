@@ -69,6 +69,7 @@ block content
         processImg(actualImage);
         actualImage.className+="centered_image"
         a.appendChild(actualImage);
+        $pictureDLrunning=false;
       });
 
       if(imgNo>1){
@@ -89,7 +90,6 @@ block content
 
       document.body.appendChild(imageContainer);
       $isDrawed=imgNo;
-      $pictureDLrunning=false;
     }
 
     $('body').on('change', 'input[name=serverAlgo]:radio', changeServerMode);

@@ -1,10 +1,10 @@
 %%
 clear all
-
+pkg load statistics
 
 %% Setup variables
 %Uni
-plot_path='E:\git\picgallery\Evaluation\log';
+plot_path='E:\git\gallery\Evaluation\log';
 %Home
 %plot_path='E:\Git\gallery\log';
 
@@ -15,6 +15,7 @@ dirListing = dir(current_folder);
 number_of_files = length(dirListing);
 
 estimThroughputArray=[];
+intervalArray=[];
 maxThroughputArray=[];
 maxTpt=0;
 
@@ -44,8 +45,12 @@ for j=1:number_of_files
                   maxTpt=str2double(filename);
             end
 
-            estimThroughputArray=[estimThroughputArray mean(tptKBs{j}.*8./1000)];
+            [M,C] = nanmeanConfInt(tptKBs{j}.*8./1000, 0.95, 1);
+
+            estimThroughputArray=[estimThroughputArray M];
+            intervalArray=[intervalArray C];
             maxThroughputArray=[maxThroughputArray mean(maxThroughput{j})];
+
     end
 
 %Measured tpt vs Set tpt 
@@ -55,10 +60,11 @@ set (gcf, "paperposition", [0, 0, 6.4, 4.8]);
 
 figure(2); hold all; box on;
 
-plot([0 1000], [0 1000],'k:');
-scatter (maxThroughputArray, estimThroughputArray, 'b', 'x');
-
 XY=[0:1:maxTpt];
+plot([0 maxTpt+0.5], [0 maxTpt+0.5],'k:');
+%scatter (maxThroughputArray, estimThroughputArray, 'b', 'x');
+errorbar(maxThroughputArray,estimThroughputArray,intervalArray,'b')
+
 set(gca,'XTick',XY);
 set(gca,'YTick',XY);
 

@@ -4,7 +4,7 @@ clear all
 
 %% Setup variables
 %Uni
-plot_path='E:\git\picgallery\Evaluation\log';
+plot_path='E:\git\gallery\Evaluation\log';
 %Home
 %plot_path='E:\Git\gallery\log';
 
@@ -12,7 +12,7 @@ screen_sizes = [320 640 1024 2048 4096];
 
 algorithms= {'\tptOTF' '\tptBackground' '\ownSrcSet' '\allgemein' '\ownSrcSetvalidate'};
 
-algorithm=algorithms{1};
+algorithm=algorithms{5};
 
 plotArray{1}=[];
 plotArray{2}=[];
@@ -122,7 +122,7 @@ for j=runs
             if(strcmp(algorithm,'\ownSrcSetvalidate'))
                 %Quality Modes vs Picture Size in KB
                 figure(2); hold all; box on; 
-                X=[320 640 1024 2064 4096];
+                X=[320 640 1024 2064];
                 %scatter(picNo{j}, qualityArray{j}, 'r', 'x');
 
                 Y(1:length(plotArray{1}))=1
@@ -137,23 +137,23 @@ for j=runs
                 Y(1:length(plotArray{4}))=4
                 scatter(plotArray{4}, Y, 'c', 'x', 'LineWidth',2);
 
-                Y(1:length(plotArray{5}))=5
-                scatter(plotArray{5}, Y, 'm', 'x', 'LineWidth',2);
+                %Y(1:length(plotArray{5}))=5
+                %scatter(plotArray{5}, Y, 'm', 'x', 'LineWidth',2);
 
                 set(gca,'XTick',X);
-                set(gca,'YTick',[1 2 3 4 5]);
+                set(gca,'YTick',[1 2 3 4]);
                 %set(gca,'xscale','log')
-                set(gca,'YTickLabel',{'Small' 'Medium' 'Large' 'X-Large' 'Original'}); ;
+                set(gca,'YTickLabel',{'Small' 'Medium' 'Large' 'X-Large'}); ;
                 set(gca,'XTickLabel',X);
-                xlim([40 3500]);
-                ylim([0.5 5.5]);
+                xlim([40 2500]);
+                ylim([0.5 4.5]);
                 xlabel('Viewport Width in pixels');
-                ylabel('Selected Quality'); 
+                ylabel('Image Size'); 
 
                 allfonts=[findall(2,'type','text');findall(2,'type','axes')];
                 set(allfonts,'FontSize',16);
       
-                h = legend ('Small', 'Medium', 'Large', 'X-Large', 'Original');
+                h = legend ('Small', 'Medium', 'Large', 'X-Large');
                 rect =  [0.69,0.15,0.2,0.4];
                 set(h, 'Position', rect)
                 allMarkers = findobj(2,'type','patch'); % Find objects of type 'patch'
@@ -161,33 +161,10 @@ for j=runs
       
                 %title ('Screen Width vs Selected Quality');
 
-                %plot([320 320], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
-                %plot([640 640], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
-                %plot([1024 1024], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
-                %plot([2048 2048], [0.5 5.5], 'LineWidth',2,'Color','black','LineStyle',':' );
-
-                %handle = figure(2);
-                %save2Files2([0 1 1], [plot_path '\\'], 'ownSrcSetvalidate', handle, 2);
+                handle = figure(2);
+                save2Files2([0 1 1], [plot_path '\\'], 'ownSrcSetvalidate', handle, 2);
             end
 
-            %if(strcmp(algorithm,'\tptBackground') || strcmp(algorithm,'\tptOTF'))
-            %    %Max downlink speed vs Bildauflösung
-            %    figure(2); hold all; box on; 
-            %    Y=[1 2 3 4 5];
-            %    X=[0.5 2 3 8 12];
-            %    scatter (maxDLink{j}, qualityArray{j}, 'r');
-            %    set(gca,'XTick',X);
-            %    set(gca,'YTick',Y);
-            %    %set(gca,'xscale','log')
-            %    set(gca,'YTickLabel',{'Small' 'Medium' 'Large' 'X-Large' 'Original'}); ;
-            %    set(gca,'XTickLabel',X);
-            %    xlim([0 12.5]);
-            %    ylim([0.5 5.5]);
-            %    xlabel('Max Download Speed in Mbit');
-            %    ylabel('Selected Qualities');           
-            %    %title ('Max Download Speed vs Selected Qualities');
-            %
-            %end
 
             if(strcmp(algorithm,'\tptOTF'))
             
@@ -246,9 +223,3 @@ if(strcmp(algorithm,'\tptOTF'))
     set(allMarkers,'LineWidth', 2);
     save2Files2([0 1 1], [plot_path '\\'], [strrep(algorithm, '\\', '') '_valid'], handle, 2);
 end
-
-%figure(2); clf; hold all; box on; 
-%y = [0 100; 50 50; 90 10;40 60];
-%bar(y,'stacked')
-%handle = figure(2);
-%save2Files2([0 1 1], [plot_path '\\'], 'asd', handle, 2);

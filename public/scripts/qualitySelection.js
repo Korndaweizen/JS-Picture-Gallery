@@ -84,6 +84,8 @@ function getTptBackground() {
       console.log("getTpt Error: "+String(error));
       $backgroudDLrunning=false;
     });
+  } else {
+    console.log('Background dl failed cause conditioning');
   }
 };
 

@@ -1,3 +1,4 @@
+pkg load statistics
 
 tmp= [291.16
 292.48
@@ -10,7 +11,7 @@ tmp= [291.16
 292.95
 292.64]
 
-[M,C]=nanmeanconfint(tmp, 0.93, 1)
+[M,C]=nanmeanConfInt(tmp, 0.93, 1)
 
 plot_path='E:\Git\gallery\Matlab';
 
