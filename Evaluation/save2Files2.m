@@ -7,7 +7,7 @@ function [ ] = save2Files2( save_as, path2image, fileName, handle, latexFigureCo
 %set(gca,'units','centimeters');
 
 if save_as(2) == 1
-    %saveas(handle, [path2image 'pics\fig\' fileName '.fig'],'fig');
+    saveas(handle, [path2image fileName '.fig'],'fig');
     saveas(handle, [path2image fileName '.jpg'],'jpg');
 end
 

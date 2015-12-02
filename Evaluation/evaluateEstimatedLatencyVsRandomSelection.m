@@ -4,9 +4,7 @@ pkg load statistics
 
 %% Setup variables
 %Uni
-plot_path='E:\git\gallery\Evaluation\log';
-%Home
-%plot_path='E:\Git\gallery\log';
+plot_path='.\log';
 
 folder='\evaluateEstimatedLatencyVsRandomSelection'
 
@@ -39,8 +37,8 @@ end
 set (gcf, "papersize", [6.4, 4.8]); 
 set (gcf, "paperposition", [0, 0, 6.4, 4.8]);
 
-averageLatencyRandomSelect=round(mean([mean(latencServer1{j}) mean(latencServer2{j}) mean(latencServer3{j})])*10)/10
-averagePickedLatency=round(mean(selectedLatency{j})*10)/10
+averageLatencyRandomSelect=round(mean([mean(latencServer1{j}) mean(latencServer2{j}) mean(latencServer3{j})])*100)/100
+averagePickedLatency=round(mean(selectedLatency{j})*100)/100
 
 Randomarray=[];
 Randomarray=[latencServer1{j}; latencServer2{j}; latencServer3{j}]
@@ -66,4 +64,4 @@ C
 C1
 
 handle = figure(2);
-save2Files2([0 1 1], [plot_path '\\'], 'latency_bars', handle, 2);
+save2Files2([0 1 1], [plot_path '\\'], 'latency_bars.pdf', handle, 2);

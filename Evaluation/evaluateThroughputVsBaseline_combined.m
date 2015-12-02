@@ -4,9 +4,7 @@ pkg load statistics
 
 %% Setup variables
 %Uni
-plot_path='E:\git\gallery\Evaluation\log';
-%Home
-%plot_path='E:\Git\gallery\log';
+plot_path='.\log';
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -154,4 +152,4 @@ allMarkers = findobj(2,'type','patch');
 set(allMarkers,'LineWidth', 2);
 
 handle = figure(2);
-save2Files2([0 1 1], [plot_path '\\'], 'tpt_accuracy_netem_combined', handle, 2);
+save2Files2([0 1 1], [plot_path '\\'], 'tpt_accuracy_netem_combined.pdf', handle, 2);
